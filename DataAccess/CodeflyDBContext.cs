@@ -26,6 +26,11 @@ public class CodeFlyDbContext : DbContext
             .WithOne(ud => ud.User)
             .HasForeignKey<UserDetail>(ud => ud.User_Id);
 
+        // modelBuilder.Entity<User>()
+        //     .HasOne(u => u.Role)
+        //     .WithOne(r => r.)
+        //     .HasForeignKey<UserDetail>(ud => ud.User_Id);
+
         modelBuilder.Entity<Feature>()
             .HasOne(f => f.Role)
             .WithMany(r => r.Features)

@@ -17,14 +17,14 @@
           "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "net7.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {}
           }
         },
@@ -35,8 +35,8 @@
         }
       },
       "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "EntityFramework": {
               "target": "Package",
@@ -54,7 +54,7 @@
             },
             "MySql.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.17.2, )"
+              "version": "[5.0.16, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
@@ -67,7 +67,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -76,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Asus\\Downloads\\dotnet-sdk-5.0.408-win-x64\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Asus\\Downloads\\dotnet-sdk-7.0.304-win-x64\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -2,7 +2,6 @@ C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\DataAccess.deps.
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\DataAccess.runtimeconfig.json
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\DataAccess.runtimeconfig.dev.json
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\DataAccess.dll
-C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\ref\DataAccess.dll
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\bin\Debug\net5.0\DataAccess.pdb
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\DataAccess.csproj.AssemblyReference.cache
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
@@ -13,3 +12,4 @@ C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\DataAccess.dll
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\ref\DataAccess.dll
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\DataAccess.pdb
 C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\DataAccess.genruntimeconfig.cache
+C:\Users\Asus\RiderProjects\CodeFly\DataAccess\obj\Debug\net5.0\refint\DataAccess.dll
