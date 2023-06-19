@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
         {
-            var seasons = await _dbContext.Season.ToListAsync();
+            var seasons = await _dbContext.Seasons.ToListAsync();
             return Ok(seasons);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Season>> GetSeason(int id)
         {
-            var season = await _dbContext.Season.FindAsync(id);
+            var season = await _dbContext.Seasons.FindAsync(id);
 
             if (season == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Season>> CreateSeason(Season season)
         {
-            _dbContext.Season.Add(season);
+            _dbContext.Seasons.Add(season);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSeason), new { id = season.Id }, season);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSeason(int id)
         {
-            var season = await _dbContext.Season.FindAsync(id);
+            var season = await _dbContext.Seasons.FindAsync(id);
 
             if (season == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Season.Remove(season);
+            _dbContext.Seasons.Remove(season);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

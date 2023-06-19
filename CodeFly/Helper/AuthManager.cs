@@ -9,7 +9,7 @@ namespace CodeFly.Helper
 {
     public class AuthManager
     {
-        private const string SecretKey = "your_secret_key_here"; // Replace with your own secret key
+        private const string SecretKey = "fD+402BtCqxSGwkuGc2sncSLKC5m1QcS7UlafnAKllleorGT5YwXVKcq0KbcjxRy"; // Replace with your own secret key
         private static readonly byte[] SecretBytes = Encoding.UTF8.GetBytes(SecretKey);
 
         public static string GenerateAuthToken(User user)

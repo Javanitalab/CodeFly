@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetSubjects()
         {
-            var subjects = await _dbContext.Subject.ToListAsync();
+            var subjects = await _dbContext.Subjects.ToListAsync();
             return Ok(subjects);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> GetSubject(int id)
         {
-            var subject = await _dbContext.Subject.FindAsync(id);
+            var subject = await _dbContext.Subjects.FindAsync(id);
 
             if (subject == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Subject>> CreateSubject(Subject subject)
         {
-            _dbContext.Subject.Add(subject);
+            _dbContext.Subjects.Add(subject);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSubject), new { id = subject.Id }, subject);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubject(int id)
         {
-            var subject = await _dbContext.Subject.FindAsync(id);
+            var subject = await _dbContext.Subjects.FindAsync(id);
 
             if (subject == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Subject.Remove(subject);
+            _dbContext.Subjects.Remove(subject);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

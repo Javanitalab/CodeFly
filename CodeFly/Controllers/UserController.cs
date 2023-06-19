@@ -19,7 +19,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
-        var users = await _dbContext.User.ToListAsync();
+        var users = await _dbContext.Users.ToListAsync();
         return Ok(users);
     }
 
@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUser(int id)
     {
-        var user = await _dbContext.User.FindAsync(id);
+        var user = await _dbContext.Users.FindAsync(id);
 
         if (user == null)
         {
@@ -41,7 +41,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<User>> CreateUser(User user)
     {
-        _dbContext.User.Add(user);
+        _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
@@ -66,14 +66,14 @@ public class UserController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        var user = await _dbContext.User.FindAsync(id);
+        var user = await _dbContext.Users.FindAsync(id);
 
         if (user == null)
         {
             return NotFound();
         }
 
-        _dbContext.User.Remove(user);
+        _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
 
         return NoContent();

@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Feature>>> GetFeatures()
         {
-            var features = await _dbContext.Feature.ToListAsync();
+            var features = await _dbContext.Features.ToListAsync();
             return Ok(features);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Feature>> GetFeature(int id)
         {
-            var feature = await _dbContext.Feature.FindAsync(id);
+            var feature = await _dbContext.Features.FindAsync(id);
 
             if (feature == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Feature>> CreateFeature(Feature feature)
         {
-            _dbContext.Feature.Add(feature);
+            _dbContext.Features.Add(feature);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetFeature), new { id = feature.Id }, feature);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeature(int id)
         {
-            var feature = await _dbContext.Feature.FindAsync(id);
+            var feature = await _dbContext.Features.FindAsync(id);
 
             if (feature == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Feature.Remove(feature);
+            _dbContext.Features.Remove(feature);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

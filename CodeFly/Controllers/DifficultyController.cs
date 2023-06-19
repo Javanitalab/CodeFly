@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CodeFly.DTO;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,31 +20,31 @@ namespace CodeFly.Controllers
 
         // GET: api/Difficulty
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Difficulty>>> GetDifficulties()
+        public async Task<ActionResult<Result<IEnumerable<Difficulty>>>> GetDifficulties()
         {
-            var difficulties = await _dbContext.Difficulty.ToListAsync();
-            return Ok(difficulties);
+            var difficulties = await _dbContext.Difficulties.ToListAsync();
+            return Ok(Result<IEnumerable<Difficulty>>.GenerateSuccess(difficulties));
         }
 
         // GET: api/Difficulty/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Difficulty>> GetDifficulty(int id)
+        public async Task<ActionResult<Result<Difficulty>>> GetDifficulty(int id)
         {
-            var difficulty = await _dbContext.Difficulty.FindAsync(id);
+            var difficulty = await _dbContext.Difficulties.FindAsync(id);
 
             if (difficulty == null)
             {
-                return NotFound();
+                return NotFound(Result<object>.GenerateFailure("diff not found",400));
             }
 
-            return Ok(difficulty);
+            return Ok(Result<Difficulty>.GenerateSuccess(difficulty));
         }
 
         // POST: api/Difficulty
         [HttpPost]
-        public async Task<ActionResult<Difficulty>> CreateDifficulty(Difficulty difficulty)
+        public async Task<ActionResult<Result<Difficulty>>> CreateDifficulty(Difficulty difficulty)
         {
-            _dbContext.Difficulty.Add(difficulty);
+            _dbContext.Difficulties.Add(difficulty);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetDifficulty), new { id = difficulty.Id }, difficulty);
@@ -51,7 +52,7 @@ namespace CodeFly.Controllers
 
         // PUT: api/Difficulty/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDifficulty(int id, Difficulty difficulty)
+        public async Task<ActionResult<Result<Difficulty>>> UpdateDifficulty(int id, Difficulty difficulty)
         {
             if (id != difficulty.Id)
             {
@@ -61,24 +62,24 @@ namespace CodeFly.Controllers
             _dbContext.Entry(difficulty).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(Result<Difficulty>.GenerateSuccess(difficulty));
         }
 
         // DELETE: api/Difficulty/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDifficulty(int id)
+        public async Task<ActionResult<Result<Difficulty>>> DeleteDifficulty(int id)
         {
-            var difficulty = await _dbContext.Difficulty.FindAsync(id);
+            var difficulty = await _dbContext.Difficulties.FindAsync(id);
 
             if (difficulty == null)
             {
-                return NotFound();
+                return NotFound(Result<object>.GenerateFailure("not found",400));
             }
 
-            _dbContext.Difficulty.Remove(difficulty);
+            _dbContext.Difficulties.Remove(difficulty);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(Result<Difficulty>.GenerateSuccess(difficulty));
         }
     }
 

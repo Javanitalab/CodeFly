@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace DataAccess.Models
+namespace DataAccess.Models;
+
+public partial class Permission
 {
-    public class Permission
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public IEnumerable<Feature> Features { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public int? FeatureId { get; set; }
+
+    public virtual Feature Feature { get; set; }
 }

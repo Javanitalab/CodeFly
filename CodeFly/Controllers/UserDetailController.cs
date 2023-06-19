@@ -19,17 +19,17 @@ namespace CodeFly.Controllers
 
         // GET: api/UserDetail
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDetail>>> GetUserDetails()
+        public async Task<ActionResult<IEnumerable<Userdetail>>> GetUserDetails()
         {
-            var userDetails = await _dbContext.UserDetail.ToListAsync();
+            var userDetails = await _dbContext.Userdetails.ToListAsync();
             return Ok(userDetails);
         }
 
         // GET: api/UserDetail/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDetail>> GetUserDetail(int id)
+        public async Task<ActionResult<Userdetail>> GetUserDetail(int id)
         {
-            var userDetail = await _dbContext.UserDetail.FindAsync(id);
+            var userDetail = await _dbContext.Userdetails.FindAsync(id);
 
             if (userDetail == null)
             {
@@ -41,9 +41,9 @@ namespace CodeFly.Controllers
 
         // POST: api/UserDetail
         [HttpPost]
-        public async Task<ActionResult<UserDetail>> CreateUserDetail(UserDetail userDetail)
+        public async Task<ActionResult<Userdetail>> CreateUserDetail(Userdetail userDetail)
         {
-            _dbContext.UserDetail.Add(userDetail);
+            _dbContext.Userdetails.Add(userDetail);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetUserDetail), new { id = userDetail.Id }, userDetail);
@@ -51,7 +51,7 @@ namespace CodeFly.Controllers
 
         // PUT: api/UserDetail/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserDetail(int id, UserDetail userDetail)
+        public async Task<IActionResult> UpdateUserDetail(int id, Userdetail userDetail)
         {
             if (id != userDetail.Id)
             {
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserDetail(int id)
         {
-            var userDetail = await _dbContext.UserDetail.FindAsync(id);
+            var userDetail = await _dbContext.Userdetails.FindAsync(id);
 
             if (userDetail == null)
             {
                 return NotFound();
             }
 
-            _dbContext.UserDetail.Remove(userDetail);
+            _dbContext.Userdetails.Remove(userDetail);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

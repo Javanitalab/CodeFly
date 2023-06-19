@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons()
         {
-            var lessons = await _dbContext.Lesson.ToListAsync();
+            var lessons = await _dbContext.Lessons.ToListAsync();
             return Ok(lessons);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Lesson>> GetLesson(int id)
         {
-            var lesson = await _dbContext.Lesson.FindAsync(id);
+            var lesson = await _dbContext.Lessons.FindAsync(id);
 
             if (lesson == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Lesson>> CreateLesson(Lesson lesson)
         {
-            _dbContext.Lesson.Add(lesson);
+            _dbContext.Lessons.Add(lesson);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetLesson), new { id = lesson.Id }, lesson);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLesson(int id)
         {
-            var lesson = await _dbContext.Lesson.FindAsync(id);
+            var lesson = await _dbContext.Lessons.FindAsync(id);
 
             if (lesson == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Lesson.Remove(lesson);
+            _dbContext.Lessons.Remove(lesson);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

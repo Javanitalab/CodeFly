@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
-            var roles = await _dbContext.Role.ToListAsync();
+            var roles = await _dbContext.Roles.ToListAsync();
             return Ok(roles);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Role>> GetRole(int id)
         {
-            var role = await _dbContext.Role.FindAsync(id);
+            var role = await _dbContext.Roles.FindAsync(id);
 
             if (role == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Role>> CreateRole(Role role)
         {
-            _dbContext.Role.Add(role);
+            _dbContext.Roles.Add(role);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetRole), new { id = role.Id }, role);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {
-            var role = await _dbContext.Role.FindAsync(id);
+            var role = await _dbContext.Roles.FindAsync(id);
 
             if (role == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Role.Remove(role);
+            _dbContext.Roles.Remove(role);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

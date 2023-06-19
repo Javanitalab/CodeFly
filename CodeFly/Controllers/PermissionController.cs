@@ -21,7 +21,7 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Permission>>> GetPermissions()
         {
-            var permissions = await _dbContext.Permission.ToListAsync();
+            var permissions = await _dbContext.Permissions.ToListAsync();
             return Ok(permissions);
         }
 
@@ -29,7 +29,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Permission>> GetPermission(int id)
         {
-            var permission = await _dbContext.Permission.FindAsync(id);
+            var permission = await _dbContext.Permissions.FindAsync(id);
 
             if (permission == null)
             {
@@ -43,7 +43,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<Permission>> CreatePermission(Permission permission)
         {
-            _dbContext.Permission.Add(permission);
+            _dbContext.Permissions.Add(permission);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPermission), new { id = permission.Id }, permission);
@@ -68,14 +68,14 @@ namespace CodeFly.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePermission(int id)
         {
-            var permission = await _dbContext.Permission.FindAsync(id);
+            var permission = await _dbContext.Permissions.FindAsync(id);
 
             if (permission == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Permission.Remove(permission);
+            _dbContext.Permissions.Remove(permission);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
