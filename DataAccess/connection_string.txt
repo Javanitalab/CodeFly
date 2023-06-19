@@ -1,1 +1,4 @@
 ﻿dotnet ef dbcontext scaffold "Server=localhost;Database=codefly;Uid=admin;Pwd=1221;" Microsoft.EntityFrameworkCore.MySql -o Models
+
+
+dotnet ef dbcontext scaffold "Server=localhost;Port=5432;Database=codefly;User Id=admin;Password=verysecret;" Npgsql.EntityFrameworkCore.PostgreSQL --output-dir Models --namespace DataAccess.Models

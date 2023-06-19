@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodeFly.Helper;
 using DataAccess;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,9 +31,9 @@ namespace CodeFly
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            ServerVersion serverVersion = ServerVersion.AutoDetect(connectionString);
+            // ServerVersion serverVersion = ServerVersion.AutoDetect(connectionString);
             services.AddDbContext<CodeFlyDbContext>(options =>
-                options.UseMySql(connectionString, serverVersion));
+                options.UseNpgsql(connectionString));
 
             services.AddControllers(options =>
             {

@@ -74,3 +74,5 @@ C:\Users\Asus\RiderProjects\CodeFly\CodeFly\obj\Debug\net7.0\refint\CodeFly.dll
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\obj\Debug\net7.0\CodeFly.pdb
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\obj\Debug\net7.0\CodeFly.genruntimeconfig.cache
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\obj\Debug\net7.0\ref\CodeFly.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Npgsql.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

@@ -7,7 +7,6 @@ namespace CodeFly.DTO;
 
 public class FeatureDTO
 {
-
     public static FeatureDTO Create(Feature feature)
     {
         var dto = new FeatureDTO();
@@ -19,6 +18,7 @@ public class FeatureDTO
 
         return dto;
     }
+
     public string Name { get; set; }
     public List<PermissionDTO> Permissions { get; set; }
 }

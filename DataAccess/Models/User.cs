@@ -13,13 +13,13 @@ public partial class User
 
     public string Password { get; set; }
 
-    public int? UserDetailId { get; set; }
+    public int? UserdetailId { get; set; }
 
     public int? RoleId { get; set; }
 
     public virtual Role Role { get; set; }
 
-    public virtual Userdetail UserDetail { get; set; }
+    public virtual Userdetail Userdetail { get; set; }
 
     public virtual ICollection<Userdetail> Userdetails { get; set; } = new List<Userdetail>();
 }

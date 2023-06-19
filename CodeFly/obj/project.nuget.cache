@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bE932XkhtFtTe9ZJkAAe6E7C2XdHyJYSED7o07lpqQn+fr3HAzD2xfXx1hw7XGhjTPibo7uirXsGF+hKRQRSLw==",
+  "dgSpecHash": "KC3AIv6prgq4qTOwbnZEaOlw9hmToktcu2u4/Dx7FaKSms4R2INftoCHdmZxJbxX/IyVRnlEA8A/0Wpj6wjE4g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Asus\\RiderProjects\\CodeFly\\CodeFly\\CodeFly.csproj",
   "expectedPackageFiles": [
@@ -36,6 +36,8 @@
     "C:\\Users\\Asus\\.nuget\\packages\\mysql.data\\8.0.33\\mysql.data.8.0.33.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\mysql.entityframeworkcore\\7.0.2\\mysql.entityframeworkcore.7.0.2.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\mysqlconnector\\2.2.5\\mysqlconnector.2.2.5.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\npgsql\\7.0.4\\npgsql.7.0.4.nupkg.sha512",
+    "C:\\Users\\Asus\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.4\\npgsql.entityframeworkcore.postgresql.7.0.4.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
