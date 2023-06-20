@@ -33,10 +33,10 @@ namespace CodeFly
                     {
 
                         // HTTP 5000
-                        options.ListenLocalhost(5000);
+                        options.Listen(IPAddress.Any,5000);
 
                         // HTTPS 5001
-                        options.ListenLocalhost(5001, builder =>
+                        options.Listen(IPAddress.Any,5001, builder =>
                         {
                             builder.UseHttps();
                         });
