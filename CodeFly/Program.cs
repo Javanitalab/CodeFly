@@ -29,7 +29,18 @@ namespace CodeFly
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    // webBuilder.UseUrls("http://0.0.0.0:5000");
+                    webBuilder.UseKestrel(options =>
+                    {
+
+                        // HTTP 5000
+                        options.ListenLocalhost(5000);
+
+                        // HTTPS 5001
+                        options.ListenLocalhost(5001, builder =>
+                        {
+                            builder.UseHttps();
+                        });
+                    });
                     // webBuilder.UseKestrel(options =>
                     // {
                     //     options.Limits.MaxRequestBodySize = 10000000;
