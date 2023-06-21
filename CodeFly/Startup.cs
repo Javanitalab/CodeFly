@@ -34,6 +34,16 @@ namespace CodeFly
             // ServerVersion serverVersion = ServerVersion.AutoDetect(connectionString);
             services.AddDbContext<CodeFlyDbContext>(options =>
                 options.UseNpgsql(connectionString));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("YouShallPass", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
 
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); });
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "CodeFly", Version = "v1" }); });
@@ -49,6 +59,8 @@ namespace CodeFly
 
 
             // app.UseHttpsRedirection();
+
+            app.UseCors("YouShallPass");
 
             app.UseRouting();
 
