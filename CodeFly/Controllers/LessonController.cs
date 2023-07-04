@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CodeFly.Controllers
 {
@@ -25,6 +28,19 @@ namespace CodeFly.Controllers
             var lessons = await _dbContext.Lessons.ToListAsync();
             return Ok(lessons);
         }
+        
+        [HttpGet("{SeasonId}")]
+        public async Task<Result<List<LessonDTO>>> GetLessons(int seasonId)
+        {
+            var lessons = await _dbContext.Lessons.Where(l=>l.SeasonId==seasonId).ToListAsync();
+            if (!lessons.IsNullOrEmpty())
+            {
+
+                return Result<List<LessonDTO>>.GenerateSuccess(lessons.Select(s => LessonDTO.Create(s)).ToList());
+            }
+            return Result<List<LessonDTO>>.GenerateFailure(" no lessons found",400);
+        }
+
 
         // GET: api/Lesson/{id}
         [HttpGet("{id}")]
@@ -81,5 +97,7 @@ namespace CodeFly.Controllers
 
             return NoContent();
         }
+        
+        
     }
 }
