@@ -55,13 +55,13 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpGet("{fileName}")]
-    public Result<string> GetHtmlFile(string fileName)
+    [HttpGet("{lessonId}")]
+    public Result<string> GetHtmlFile(int lessonId)
     {
         try
         {
             // Set the file path on the Ubuntu server
-            string filePath = Path.Combine(_pathToDirectory, fileName);
+            string filePath = Path.Combine(_pathToDirectory, lessonId+".html");
 
             // Check if the file exists
             if (!System.IO.File.Exists(filePath))
