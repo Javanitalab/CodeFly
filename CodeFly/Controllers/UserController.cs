@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,24 +23,28 @@ public class UserController : ControllerBase
 
     // GET: api/User
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<Result<IEnumerable<User>>> GetUsers()
     {
-        var users = await _dbContext.Users.ToListAsync();
-        return Ok(users);
+        var users = await _dbContext.Users
+            .Join(_dbContext.Userdetails,
+                user => user.Id,
+                detail => detail.UserId,
+                (user, detail) => user).ToListAsync();
+        return Result<IEnumerable<User>>.GenerateSuccess(users);
     }
 
     // GET: api/User/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
+    public async Task<Result<User>> GetUser(int id)
     {
-        var user = await _dbContext.Users.FindAsync(id);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Userdetail.UserId == id);
 
         if (user == null)
         {
-            return NotFound();
+            return Result<User>.GenerateFailure("user not found",400);
         }
 
-        return Ok(user);
+        return Result<User>.GenerateSuccess(user);
     }
 
     // POST: api/User
@@ -52,17 +59,17 @@ public class UserController : ControllerBase
 
     // PUT: api/User/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(int id, User user)
+    public async Task<Result<string>> UpdateUser(int id, User user)
     {
         if (id != user.Id)
         {
-            return BadRequest();
+            return Result<string>.GenerateFailure("user not found",400);
         }
 
         _dbContext.Entry(user).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
 
-        return NoContent();
+        return Result<string>.GenerateSuccess("done");
     }
 
     // DELETE: api/User/{id}
