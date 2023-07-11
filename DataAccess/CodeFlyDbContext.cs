@@ -212,14 +212,9 @@ public partial class CodeFlyDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Userdetails)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("userdetail_user_id_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

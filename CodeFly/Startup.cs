@@ -47,6 +47,7 @@ namespace CodeFly
 
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); });
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "CodeFly", Version = "v1" }); });
+            services.AddTransient<Repository>();
         }
 
 

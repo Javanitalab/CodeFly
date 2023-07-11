@@ -20,23 +20,23 @@ namespace CodeFly.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: api/UserDetail
-        [HttpGet]
-        public async Task<Result<IEnumerable<Userdetail>>> GetUserDetails()
-        {
-            var userDetails = await _dbContext.Userdetails
-                .Join(_dbContext.Users,
-                    detail => detail.UserId,
-                    user => user.Id,
-                    (detail, user) => detail).ToListAsync();
-            return Result<IEnumerable<Userdetail>>.GenerateSuccess(userDetails);
-        }
+        // // GET: api/UserDetail
+        // [HttpGet]
+        // public async Task<Result<IEnumerable<Userdetail>>> GetUserDetails(PagingModel pagingModel)
+        // {
+        //     var userDetails = await _dbContext.Userdetails
+        //         .Join(_dbContext.Users,
+        //             detail => detail.Users.FirstOrDefault().Id,
+        //             user => user.Id,
+        //             (detail, user) => detail).ToListAsync();
+        //     return Result<IEnumerable<Userdetail>>.GenerateSuccess(userDetails);
+        // }
 
         // GET: api/UserDetail/{id}
         [HttpGet("{id}")]
         public async Task<Result<Userdetail>> GetUserDetail(int id)
         {
-            var userDetail = await _dbContext.Userdetails.FirstOrDefaultAsync(u => u.User.UserdetailId == id);
+            var userDetail = await _dbContext.Userdetails.FirstOrDefaultAsync(u => u.Users.FirstOrDefault().UserdetailId == id);
 
             if (userDetail == null)
             {

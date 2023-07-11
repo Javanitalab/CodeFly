@@ -20,6 +20,4 @@ public partial class User
     public virtual Role Role { get; set; }
 
     public virtual Userdetail Userdetail { get; set; }
-
-    public virtual ICollection<Userdetail> Userdetails { get; set; } = new List<Userdetail>();
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CodeFly.DTO;
 using DataAccess;
@@ -15,33 +16,32 @@ namespace CodeFly.Controllers;
 public class UserController : ControllerBase
 {
     private readonly CodeFlyDbContext _dbContext;
+    private readonly Repository _repository;
 
-    public UserController(CodeFlyDbContext dbContext)
+    public UserController(CodeFlyDbContext dbContext, Repository repository)
     {
         _dbContext = dbContext;
+        _repository = repository;
     }
 
     // GET: api/User
     [HttpGet]
-    public async Task<Result<IEnumerable<User>>> GetUsers()
+    public async Task<Result<IEnumerable<UserDTO>>> GetUsers(PagingModel pagingModel)
     {
-        var users = await _dbContext.Users
-            .Join(_dbContext.Userdetails,
-                user => user.Id,
-                detail => detail.UserId,
-                (user, detail) => user).ToListAsync();
-        return Result<IEnumerable<User>>.GenerateSuccess(users);
+        var users = await _repository.ListAsNoTrackingAsync<User>(u => u.Id != -1, pagingModel, u => u.Userdetail,
+            u => u.Role);
+        return Result<IEnumerable<UserDTO>>.GenerateSuccess(users.Select(UserDTO.Create));
     }
 
     // GET: api/User/{id}
     [HttpGet("{id}")]
     public async Task<Result<User>> GetUser(int id)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Userdetail.UserId == id);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Userdetail.Users.FirstOrDefault().Id == id);
 
         if (user == null)
         {
-            return Result<User>.GenerateFailure("user not found",400);
+            return Result<User>.GenerateFailure("user not found", 400);
         }
 
         return Result<User>.GenerateSuccess(user);
@@ -63,7 +63,7 @@ public class UserController : ControllerBase
     {
         if (id != user.Id)
         {
-            return Result<string>.GenerateFailure("user not found",400);
+            return Result<string>.GenerateFailure("user not found", 400);
         }
 
         _dbContext.Entry(user).State = EntityState.Modified;
