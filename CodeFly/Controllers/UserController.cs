@@ -26,7 +26,7 @@ public class UserController : ControllerBase
 
     // GET: api/User
     [HttpGet]
-    public async Task<Result<IEnumerable<UserDTO>>> GetUsers(PagingModel pagingModel)
+    public async Task<Result<IEnumerable<UserDTO>>> GetUsers([FromQuery] PagingModel pagingModel)
     {
         var users = await _repository.ListAsNoTrackingAsync<User>(u => u.Id != -1, pagingModel, u => u.Userdetail,
             u => u.Role);
