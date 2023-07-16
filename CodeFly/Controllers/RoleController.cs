@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,29 +22,29 @@ namespace CodeFly.Controllers
 
         // GET: api/Role
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        public async Task<Result<IEnumerable<RoleDTO>>> GetRoles()
         {
             var roles = await _dbContext.Roles.ToListAsync();
-            return Ok(roles);
+            return Result<IEnumerable<RoleDTO>>.GenerateSuccess(roles.Select(RoleDTO.Create));
         }
 
         // GET: api/Role/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Role>> GetRole(int id)
+        public async Task<Result<RoleDTO>> GetRole(int id)
         {
             var role = await _dbContext.Roles.FindAsync(id);
 
             if (role == null)
             {
-                return NotFound();
+                return Result<RoleDTO>.GenerateFailure("not found");
             }
 
-            return Ok(role);
+            return Result<RoleDTO>.GenerateSuccess(RoleDTO.Create(role));
         }
 
         // POST: api/Role
         [HttpPost]
-        public async Task<ActionResult<Role>> CreateRole(Role role)
+        public async Task<ActionResult<RoleDTO>> CreateRole(Role role)
         {
             _dbContext.Roles.Add(role);
             await _dbContext.SaveChangesAsync();
@@ -52,35 +54,34 @@ namespace CodeFly.Controllers
 
         // PUT: api/Role/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRole(int id, Role role)
+        public async Task<Result<string>> UpdateRole(int id, Role role)
         {
             if (id != role.Id)
             {
-                return BadRequest();
+                return Result<string>.GenerateFailure("not found");
             }
 
             _dbContext.Entry(role).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("edited");
         }
 
         // DELETE: api/Role/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<Result<string>> DeleteRole(int id)
         {
             var role = await _dbContext.Roles.FindAsync(id);
 
             if (role == null)
             {
-                return NotFound();
+                return Result<string>.GenerateFailure("not found",400);
             }
 
             _dbContext.Roles.Remove(role);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("deleted");
         }
     }
-
 }

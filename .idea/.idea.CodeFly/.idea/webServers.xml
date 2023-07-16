@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c01a3fa2-72ac-444c-81c9-230964464514" name="contabo vps" url="http://38.242.149.105:5050">
+        <fileTransfer rootFolder="/root/projects" accessType="SFTP" host="38.242.149.105" port="22" sshConfigId="953d0835-725b-4397-9f8d-0aefd4818419" sshConfig="root@38.242.149.105:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

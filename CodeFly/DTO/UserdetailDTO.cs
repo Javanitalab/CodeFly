@@ -8,6 +8,7 @@ public class UserdetailDTO
     public static UserdetailDTO Create(Userdetail user)
     {
         var dto = new UserdetailDTO();
+        dto.Id = user.Id;
         dto.Age = user.Age;
         dto.Bio = user.Bio;
         dto.Website = user.Website;

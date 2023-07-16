@@ -35,22 +35,24 @@ public class UserController : ControllerBase
 
     // GET: api/User/{id}
     [HttpGet("{id}")]
-    public async Task<Result<User>> GetUser(int id)
+    public async Task<Result<UserDTO>> GetUser(int id)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Userdetail.Users.FirstOrDefault().Id == id);
 
         if (user == null)
         {
-            return Result<User>.GenerateFailure("user not found", 400);
+            return Result<UserDTO>.GenerateFailure("user not found", 400);
         }
 
-        return Result<User>.GenerateSuccess(user);
+        return Result<UserDTO>.GenerateSuccess(UserDTO.Create(user));
     }
 
     // POST: api/User
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(User user)
+    public async Task<ActionResult<UserDTO>> CreateUser(UserDTO userdto)
     {
+        var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+        var user = new User() { Email = userdto.Email, Password = userdto.Email, Username = userdto.Username, Role = role };
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 

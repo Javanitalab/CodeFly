@@ -1,4 +1,6 @@
-﻿using DataAccess.Models;
+﻿using System;
+using System.Collections.Generic;
+using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
@@ -28,9 +30,13 @@ public partial class CodeFlyDbContext : DbContext
 
     public virtual DbSet<Subject> Subjects { get; set; }
 
+    public virtual DbSet<Task> Tasks { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Userdetail> Userdetails { get; set; }
+
+    public virtual DbSet<Usertask> Usertasks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -164,6 +170,23 @@ public partial class CodeFlyDbContext : DbContext
                 .HasColumnName("name");
         });
 
+        modelBuilder.Entity<Task>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("task_pkey");
+
+            entity.ToTable("task");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("name");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.Value).HasColumnName("value");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("user_pkey");
@@ -175,12 +198,15 @@ public partial class CodeFlyDbContext : DbContext
             entity.HasIndex(e => e.Username, "user_username_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Coins).HasColumnName("coins");
+            entity.Property(e => e.Cups).HasColumnName("cups");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");
+            entity.Property(e => e.Points).HasColumnName("points");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.UserdetailId).HasColumnName("userdetail_id");
             entity.Property(e => e.Username)
@@ -215,6 +241,29 @@ public partial class CodeFlyDbContext : DbContext
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
+        });
+
+        modelBuilder.Entity<Usertask>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("usertask_pkey");
+
+            entity.ToTable("usertask");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.IsDone).HasColumnName("isDone");
+            entity.Property(e => e.Progress).HasColumnName("progress");
+            entity.Property(e => e.TaskId).HasColumnName("task_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Task).WithMany(p => p.Usertasks)
+                .HasForeignKey(d => d.TaskId)
+                .HasConstraintName("task_user");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Usertasks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("user_task");
         });
 
         OnModelCreatingPartial(modelBuilder);

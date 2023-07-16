@@ -26,10 +26,10 @@ namespace CodeFly.Controllers
 
         // GET: api/Lesson
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons()
+        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons()
         {
             var lessons = await _dbContext.Lessons.ToListAsync();
-            return Ok(lessons);
+            return Result<IEnumerable<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create));
         }
 
         [HttpGet("{SeasonId}")]
@@ -47,22 +47,23 @@ namespace CodeFly.Controllers
 
         // GET: api/Lesson/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Lesson>> GetLesson(int id)
+        public async Task<Result<LessonDTO>> GetLesson(int id)
         {
             var lesson = await _dbContext.Lessons.FindAsync(id);
 
             if (lesson == null)
             {
-                return NotFound();
+                return Result<LessonDTO>.GenerateFailure("not found",400);
             }
 
-            return Ok(lesson);
+            return Result<LessonDTO>.GenerateSuccess(LessonDTO.Create(lesson));
         }
 
         // POST: api/Lesson
         [HttpPost]
-        public async Task<ActionResult<Lesson>> CreateLesson(Lesson lesson)
+        public async Task<ActionResult<LessonDTO>> CreateLesson(LessonDTO lessonDto)
         {
+            var lesson = new Lesson() { Name = lessonDto.Name, FileUrl = lessonDto.FileId };
             _dbContext.Lessons.Add(lesson);
             await _dbContext.SaveChangesAsync();
 
@@ -71,12 +72,12 @@ namespace CodeFly.Controllers
 
         // POST: api/Lesson
         [HttpPost("/api/Lesson/Admin")]
-        public async Task<ActionResult<Lesson>> CreateLesson(AdminCreateLessonDTO lesson)
+        public async Task<ActionResult<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
         {
             var lastSession = await _dbContext.Lessons.LastOrDefaultAsync();
             var newLessonId = lastSession.Id + 1;
             var newLesson = new Lesson()
-                { Name = lesson.Name, SeasonId = lesson.SessionId, FileUrl = newLessonId + ".html" };
+                { Name = lesson.Name, SeasonId = lesson.SeasonId, FileUrl = newLessonId + ".html" };
             _dbContext.Lessons.Add(newLesson);
             await _dbContext.SaveChangesAsync();
 
@@ -96,26 +97,26 @@ namespace CodeFly.Controllers
 
         // PUT: api/Lesson/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, Lesson lesson)
+        public async Task<Result<string>> UpdateLesson(int id, Lesson lesson)
         {
             if (id != lesson.Id)
             {
-                return BadRequest();
+                return Result<string>.GenerateFailure("not found",400);
             }
 
             _dbContext.Entry(lesson).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("edited");
         }
 
         // PUT: api/Lesson/{id}
         [HttpPut("/api/Lesson/Admin/{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, AdminCreateLessonDTO lessonDTO)
+        public async Task<Result<string>> UpdateLesson(int id, AdminCreateLessonDTO lessonDTO)
         {
             if (id != lessonDTO.Id)
             {
-                return BadRequest();
+                return Result<string>.GenerateFailure("lesson not found",400);
             }
 
             var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == lessonDTO.Id);
@@ -136,24 +137,24 @@ namespace CodeFly.Controllers
             _dbContext.Entry(lesson).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("file added");
         }
 
         // DELETE: api/Lesson/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLesson(int id)
+        public async Task<Result<string>> DeleteLesson(int id)
         {
             var lesson = await _dbContext.Lessons.FindAsync(id);
 
             if (lesson == null)
             {
-                return NotFound();
+                return Result<string>.GenerateFailure("not found",400);
             }
 
             _dbContext.Lessons.Remove(lesson);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("deleted");
         }
     }
 }

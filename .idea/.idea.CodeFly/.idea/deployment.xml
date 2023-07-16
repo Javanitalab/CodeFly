@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="contabo vps" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="contabo vps">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/CodeFly.sln" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/CodeFly.csproj" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/DataAccess.csproj" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/obj/Debug/net7.0/DataAccess.AssemblyInfo.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/obj/Debug/net7.0/DataAccess.GeneratedMSBuildEditorConfig.editorconfig" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Difficulty.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Feature.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Lesson.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Permission.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Role.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Season.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Subject.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/User.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Models/Userdetail.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/connection_string.txt" web="/" />
+            <mapping local="$USER_HOME$/Downloads/dotnet-sdk-7.0.304-win-x64/sdk/7.0.304/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_7_default.editorconfig" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/CodeFlyDbContext.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Repository.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/Extension.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/DataAccess/PagingModel.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/AuthController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/DifficultyController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/FeatureController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/LessonController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/PermissionController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/RoleController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/SeasonController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/SubjectController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/UserController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/UserDetailController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Controllers/FileController.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/LoginRequestDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/LoginResponseDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/RegisterRequestDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/UserSmallDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/RoleDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/FeatureDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/PermissionDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/Result.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/DifficultyDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/SubjectDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/SeasonDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/LessonDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/LessonRequestDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/AdminCreateLessonDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/UserDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/DTO/UserdetailDTO.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Helper/AuthManager.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Helper/ExceptionFilter.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Properties/launchSettings.json" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/obj/Debug/net7.0/CodeFly.AssemblyInfo.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/obj/Debug/net7.0/CodeFly.GeneratedMSBuildEditorConfig.editorconfig" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Resources/Lessons/1.html" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Program.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/Startup.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/appsettings.Development.json" web="/" />
+            <mapping local="$PROJECT_DIR$/CodeFly/appsettings.json" web="/" />
+            <mapping local="$USER_HOME$/Downloads/dotnet-sdk-7.0.304-win-x64/sdk/7.0.304/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_7_default.editorconfig" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

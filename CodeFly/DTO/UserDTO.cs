@@ -19,6 +19,10 @@ public class UserDTO
             dto.Role = RoleDTO.Create(user.Role);
         }
 
+        dto.Coins  = user.Coins ?? 0;
+        dto.Points  = user.Points ?? 0;
+        dto.Cups  = user.Cups ?? 0;
+
         return dto;
     }
 
@@ -26,5 +30,12 @@ public class UserDTO
     public string Username { get; set; }
     public RoleDTO Role { get; set; }
     public UserdetailDTO Userdetail { get; set; }
+    
+    public int Coins { get; set; }
+
+    public int Points { get; set; }
+
+    public int Cups { get; set; }
+
 
 }

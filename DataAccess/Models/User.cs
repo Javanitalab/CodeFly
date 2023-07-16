@@ -17,7 +17,15 @@ public partial class User
 
     public int? RoleId { get; set; }
 
+    public int? Coins { get; set; }
+
+    public int? Points { get; set; }
+
+    public int? Cups { get; set; }
+
     public virtual Role Role { get; set; }
 
     public virtual Userdetail Userdetail { get; set; }
+
+    public virtual ICollection<Usertask> Usertasks { get; set; } = new List<Usertask>();
 }

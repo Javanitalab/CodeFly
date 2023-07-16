@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[7.0.7, )"
             },
+            "MimeTypeMap.Core": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[7.0.4, )"

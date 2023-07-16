@@ -23,30 +23,31 @@ namespace CodeFly.Controllers
 
         // GET: api/Season
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
+        public async Task<Result<IEnumerable<SeasonDTO>>> GetSeasons()
         {
             var seasons = await _dbContext.Seasons.ToListAsync();
-            return Ok(seasons);
+            return Result<IEnumerable<SeasonDTO>>.GenerateSuccess(seasons.Select(s => SeasonDTO.Create(s)));
         }
 
         // GET: api/Season/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Season>> GetSeason(int id)
+        public async Task<Result<SeasonDTO>> GetSeason(int id)
         {
             var season = await _dbContext.Seasons.FindAsync(id);
 
             if (season == null)
             {
-                return NotFound();
+                return Result<SeasonDTO>.GenerateFailure("not found", 400);
             }
 
-            return Ok(season);
+            return Result<SeasonDTO>.GenerateSuccess(SeasonDTO.Create(season));
         }
 
         // POST: api/Season
         [HttpPost]
-        public async Task<ActionResult<Season>> CreateSeason(Season season)
+        public async Task<IActionResult> CreateSeason(SeasonDTO seasonDto)
         {
+            var season = new Season() { Name = seasonDto.Name };
             _dbContext.Seasons.Add(season);
             await _dbContext.SaveChangesAsync();
 
@@ -70,35 +71,31 @@ namespace CodeFly.Controllers
 
         // DELETE: api/Season/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSeason(int id)
+        public async Task<Result<string>> DeleteSeason(int id)
         {
             var season = await _dbContext.Seasons.FindAsync(id);
 
             if (season == null)
             {
-                return NotFound();
+                return Result<string>.GenerateFailure("not found", 400);
             }
 
             _dbContext.Seasons.Remove(season);
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("deleted");
         }
-        
+
         [HttpGet("{DifficultyId}")]
         public async Task<Result<List<SeasonDTO>>> GetLessons(int difficultyId)
         {
-            var seasons = await _dbContext.Seasons.Where(s=>s.DifficultyId==difficultyId).ToListAsync();
+            var seasons = await _dbContext.Seasons.Where(s => s.DifficultyId == difficultyId).ToListAsync();
             if (!seasons.IsNullOrEmpty())
             {
-
                 return Result<List<SeasonDTO>>.GenerateSuccess(seasons.Select(s => SeasonDTO.Create(s)).ToList());
             }
-            return Result<List<SeasonDTO>>.GenerateFailure(" no lessons found",400);
+
+            return Result<List<SeasonDTO>>.GenerateFailure(" no lessons found", 400);
         }
-
     }
-    
-
-
 }

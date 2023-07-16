@@ -23,20 +23,20 @@ public class AuthController : ControllerBase
 
 
     // POST: api/User
-    [HttpGet]
-    [Route("initDB")]
-    public async Task<ActionResult<Result<Object>>> InitDB()
-    {
-        var role = new Role();
-        role.Name = "Admin";
-        var userRole = new Role();
-        userRole.Name = "User";
-        _dbContext.Roles.Add(role);
-        _dbContext.Roles.Add(userRole);
-        await _dbContext.SaveChangesAsync();
-
-        return Ok(Result<object>.GenerateSuccess("success"));
-    }
+    // [HttpGet]
+    // [Route("initDB")]
+    // public async Task<ActionResult<Result<Object>>> InitDB()
+    // {
+    //     var role = new Role();
+    //     role.Name = "Admin";
+    //     var userRole = new Role();
+    //     userRole.Name = "User";
+    //     _dbContext.Roles.Add(role);
+    //     _dbContext.Roles.Add(userRole);
+    //     await _dbContext.SaveChangesAsync();
+    //
+    //     return Ok(Result<object>.GenerateSuccess("success"));
+    // }
 
 
     // POST: api/User
