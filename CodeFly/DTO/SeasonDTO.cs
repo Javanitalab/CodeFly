@@ -15,8 +15,8 @@ public class SeasonDTO
     public static SeasonDTO Create(Season season)
     {
         var dto = new SeasonDTO();
-        dto.Name = dto.Name;
-        dto.Id = dto.Id;
+        dto.Name = season.Name;
+        dto.Id = season.Id;
         if (!season.Lessons.IsNullOrEmpty())
         {
             dto.Lessons = season.Lessons.Select(p => LessonDTO.Create(p)).ToList();

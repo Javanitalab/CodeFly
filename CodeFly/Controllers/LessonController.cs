@@ -16,29 +16,33 @@ namespace CodeFly.Controllers
     public class LessonController : ControllerBase
     {
         private readonly CodeFlyDbContext _dbContext;
+        private readonly Repository _repository;
         private static readonly string currentFilePath = Directory.GetCurrentDirectory();
         private static readonly string _pathToDirectory = currentFilePath + "/Resources/Lessons";
 
-        public LessonController(CodeFlyDbContext dbContext)
+        public LessonController(CodeFlyDbContext dbContext, Repository repository)
         {
+            _repository = repository;
             _dbContext = dbContext;
         }
 
         // GET: api/Lesson
         [HttpGet("all")]
-        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons()
+        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] PagingModel pagingModel)
         {
-            var lessons = await _dbContext.Lessons.ToListAsync();
+            var lessons = await _repository.ListAsNoTrackingAsync<Lesson>(l => l.Id != -1, pagingModel, l => l.Season);
             return Result<IEnumerable<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create));
         }
 
         [HttpGet("{SeasonId}")]
-        public async Task<Result<List<LessonDTO>>> GetLessons(int seasonId)
+        public async Task<Result<List<LessonDTO>>> GetLessons(int seasonId, [FromQuery] PagingModel pagingModel)
         {
-            var lessons = await _dbContext.Lessons.Where(l => l.SeasonId == seasonId).ToListAsync();
+            var lessons =
+                await _repository.ListAsNoTrackingAsync<Lesson>(l => l.SeasonId == seasonId, pagingModel,
+                    l => l.Season);
             if (!lessons.IsNullOrEmpty())
             {
-                return Result<List<LessonDTO>>.GenerateSuccess(lessons.Select(s => LessonDTO.Create(s)).ToList());
+                return Result<List<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create).ToList());
             }
 
             return Result<List<LessonDTO>>.GenerateFailure(" no lessons found", 400);
@@ -49,11 +53,11 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<Result<LessonDTO>> GetLesson(int id)
         {
-            var lesson = await _dbContext.Lessons.FindAsync(id);
+            var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == id);
 
             if (lesson == null)
             {
-                return Result<LessonDTO>.GenerateFailure("not found",400);
+                return Result<LessonDTO>.GenerateFailure("not found", 400);
             }
 
             return Result<LessonDTO>.GenerateSuccess(LessonDTO.Create(lesson));
@@ -97,13 +101,16 @@ namespace CodeFly.Controllers
 
         // PUT: api/Lesson/{id}
         [HttpPut("{id}")]
-        public async Task<Result<string>> UpdateLesson(int id, Lesson lesson)
+        public async Task<Result<string>> UpdateLesson(int id, LessonDTO lessonDto)
         {
-            if (id != lesson.Id)
+            var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == id);
+            if (lesson == null)
             {
-                return Result<string>.GenerateFailure("not found",400);
+                return Result<string>.GenerateFailure("not found", 400);
             }
 
+            lesson.Name = lessonDto.Name;
+            lesson.FileUrl = lessonDto.FileId;
             _dbContext.Entry(lesson).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
@@ -116,7 +123,7 @@ namespace CodeFly.Controllers
         {
             if (id != lessonDTO.Id)
             {
-                return Result<string>.GenerateFailure("lesson not found",400);
+                return Result<string>.GenerateFailure("lesson not found", 400);
             }
 
             var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == lessonDTO.Id);
@@ -126,7 +133,6 @@ namespace CodeFly.Controllers
             if (!System.IO.File.Exists(filePath))
             {
                 System.IO.File.WriteAllText(filePath, lessonDTO.HTML);
-
             }
             else
             {
@@ -148,7 +154,7 @@ namespace CodeFly.Controllers
 
             if (lesson == null)
             {
-                return Result<string>.GenerateFailure("not found",400);
+                return Result<string>.GenerateFailure("not found", 400);
             }
 
             _dbContext.Lessons.Remove(lesson);

@@ -15,17 +15,19 @@ namespace CodeFly.Controllers
     public class SeasonController : ControllerBase
     {
         private readonly CodeFlyDbContext _dbContext;
+        private readonly Repository _repository;
 
-        public SeasonController(CodeFlyDbContext dbContext)
+        public SeasonController(CodeFlyDbContext dbContext, Repository repository)
         {
+            _repository = repository;
             _dbContext = dbContext;
         }
 
         // GET: api/Season
         [HttpGet]
-        public async Task<Result<IEnumerable<SeasonDTO>>> GetSeasons()
+        public async Task<Result<IEnumerable<SeasonDTO>>> GetSeasons([FromQuery] PagingModel model)
         {
-            var seasons = await _dbContext.Seasons.ToListAsync();
+            var seasons = await _repository.ListAsNoTrackingAsync<Season>(s => s.Id != -1,model);
             return Result<IEnumerable<SeasonDTO>>.GenerateSuccess(seasons.Select(s => SeasonDTO.Create(s)));
         }
 

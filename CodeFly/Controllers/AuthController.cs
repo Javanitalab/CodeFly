@@ -14,11 +14,13 @@ namespace CodeFly.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly CodeFlyDbContext _dbContext;
+    private readonly Repository _repository;
 
 
-    public AuthController(CodeFlyDbContext dbContext)
+    public AuthController(CodeFlyDbContext dbContext,Repository repository)
     {
         _dbContext = dbContext;
+        _repository = repository;
     }
 
 
@@ -62,14 +64,14 @@ public class AuthController : ControllerBase
     [Route("login")]
     public async Task<ActionResult<Result<LoginResponseDTO>>> Login(LoginRequestDTO request)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u =>
-            u.Email.Equals(request.Email) && u.Password.Equals(request.Password));
+        var user = await _repository.FirstOrDefaultAsync<User>(u =>
+            u.Email.Equals(request.Email) && u.Password.Equals(request.Password),u=>u.Role,u=>u.Userdetail);
         if (user == null)
         {
             return BadRequest(Result<object>.GenerateFailure("user not found", 400));
         }
 
         var token = AuthManager.GenerateAuthToken(user);
-        return Ok(Result<LoginResponseDTO>.GenerateSuccess(new LoginResponseDTO(user, token)));
+        return Ok(Result<LoginResponseDTO>.GenerateSuccess(new LoginResponseDTO(UserDTO.Create(user), token)));
     }
 }
