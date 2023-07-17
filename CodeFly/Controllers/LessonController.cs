@@ -27,27 +27,26 @@ namespace CodeFly.Controllers
         }
 
         // GET: api/Lesson
-        [HttpGet("all")]
-        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] PagingModel pagingModel)
+        [HttpGet("List")]
+        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] int? seasonId,
+            [FromQuery] PagingModel pagingModel)
         {
-            var lessons = await _repository.ListAsNoTrackingAsync<Lesson>(l => l.Id != -1, pagingModel, l => l.Season);
-            return Result<IEnumerable<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create));
-        }
-
-        [HttpGet("{SeasonId}")]
-        public async Task<Result<List<LessonDTO>>> GetLessons(int seasonId, [FromQuery] PagingModel pagingModel)
-        {
-            var lessons =
-                await _repository.ListAsNoTrackingAsync<Lesson>(l => l.SeasonId == seasonId, pagingModel,
+            var lessons = new List<Lesson>();
+            if (seasonId == null)
+                lessons =
+                    (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.SeasonId == seasonId,
+                        pagingModel,
+                        l => l.Season);
+            else
+                lessons = (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.Id != -1, pagingModel,
                     l => l.Season);
-            if (!lessons.IsNullOrEmpty())
+            if (lessons.IsNullOrEmpty())
             {
-                return Result<List<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create).ToList());
+                return Result<IEnumerable<LessonDTO>>.GenerateFailure("not found", 400);
             }
 
-            return Result<List<LessonDTO>>.GenerateFailure(" no lessons found", 400);
+            return Result<IEnumerable<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create));
         }
-
 
         // GET: api/Lesson/{id}
         [HttpGet("{id}")]
@@ -75,7 +74,7 @@ namespace CodeFly.Controllers
         }
 
         // POST: api/Lesson
-        [HttpPost("/api/Lesson/Admin")]
+        [HttpPost("CreateAdmin")]
         public async Task<ActionResult<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
         {
             var lastSession = await _dbContext.Lessons.LastOrDefaultAsync();
@@ -118,7 +117,7 @@ namespace CodeFly.Controllers
         }
 
         // PUT: api/Lesson/{id}
-        [HttpPut("/api/Lesson/Admin/{id}")]
+        [HttpPut("EditAdmin/{id}")]
         public async Task<Result<string>> UpdateLesson(int id, AdminCreateLessonDTO lessonDTO)
         {
             if (id != lessonDTO.Id)
