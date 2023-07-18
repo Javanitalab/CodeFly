@@ -28,6 +28,7 @@ namespace CodeFly.Controllers
         public async Task<Result<IEnumerable<ChapterDTO>>> GetSeasons([FromQuery] PagingModel model)
         {
             var seasons = await _repository.ListAsNoTrackingAsync<Chapter>(s => s.Id != -1,model);
+            
             return Result<IEnumerable<ChapterDTO>>.GenerateSuccess(seasons.Select(s => ChapterDTO.Create(s)));
         }
 

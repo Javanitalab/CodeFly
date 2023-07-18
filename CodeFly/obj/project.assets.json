@@ -7699,8 +7699,7 @@
         "net7.0"
       ],
       "sources": {
-        "C:\\Users\\Asus\\Downloads\\dotnet-sdk-7.0.304-win-x64\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "C:\\Users\\Asus\\Downloads\\dotnet-sdk-7.0.304-win-x64\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {}
       },
       "frameworks": {
         "net7.0": {
