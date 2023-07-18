@@ -12,13 +12,8 @@ public class RoleDTO
     {
         var dto = new RoleDTO();
         dto.Name = role.Name;
-        if (!role.Features.IsNullOrEmpty())
-        {
-            dto.Features = role.Features.Select(f => FeatureDTO.Create(f)).ToList();
-        }
 
         return dto;
     }
     public string Name { get; set; }
-    public List<FeatureDTO> Features { get; set; }
 }

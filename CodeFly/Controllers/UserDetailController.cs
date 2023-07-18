@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeFly.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user_detail")]
     [ApiController]
     public class UserDetailController : ControllerBase
     {

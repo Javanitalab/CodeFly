@@ -9,9 +9,13 @@ public partial class Lesson
 
     public string Name { get; set; }
 
-    public int? SeasonId { get; set; }
+    public int? ChapterId { get; set; }
 
     public string FileUrl { get; set; }
 
-    public virtual Season Season { get; set; }
+    public virtual Chapter Chapter { get; set; }
+
+    public virtual ICollection<Userlesson> Userlessons { get; set; } = new List<Userlesson>();
+
+    public virtual ICollection<Userquest> Userquests { get; set; } = new List<Userquest>();
 }

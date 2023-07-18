@@ -4,6 +4,6 @@ public class AdminCreateLessonDTO
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public int SeasonId { get; set; }
+    public int ChapterId { get; set; }
     public string HTML { get; set; }
 }

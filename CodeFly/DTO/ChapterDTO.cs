@@ -6,20 +6,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CodeFly.DTO;
 
-public class SeasonDTO
+public class ChapterDTO
 {
     public int Id { get; set; }
     public String Name { get; set; }
     public List<LessonDTO> Lessons { get; set; }
     
-    public static SeasonDTO Create(Season season)
+    public static ChapterDTO Create(Chapter chapter)
     {
-        var dto = new SeasonDTO();
-        dto.Name = season.Name;
-        dto.Id = season.Id;
-        if (!season.Lessons.IsNullOrEmpty())
+        var dto = new ChapterDTO();
+        dto.Name = chapter.Name;
+        dto.Id = chapter.Id;
+        if (!chapter.Lessons.IsNullOrEmpty())
         {
-            dto.Lessons = season.Lessons.Select(p => LessonDTO.Create(p)).ToList();
+            dto.Lessons = chapter.Lessons.Select(p => LessonDTO.Create(p)).ToList();
         }
 
         return dto;

@@ -12,7 +12,7 @@ using MimeTypes.Core;
 
 namespace CodeFly.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/file")]
 [ApiController]
 public class FileController : ControllerBase
 {
@@ -33,7 +33,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpPost("/Content/Upload")]
+    [HttpPost("/content/upload")]
     public async Task<IActionResult> UploadMedia([FromForm] MediaUpload mediaUpload)
     {
         if (mediaUpload.File == null || mediaUpload.File.Length == 0)
@@ -61,7 +61,7 @@ public class FileController : ControllerBase
         return Ok("File uploaded successfully.");
     }
 
-    [HttpGet("/Content/Download/{fileName}")]
+    [HttpGet("/content/download/{fileName}")]
     public IActionResult DownloadMedia(string fileName)
     {
         // Combine the requested filename with the upload directory to get the full path
@@ -92,7 +92,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpPost("/Lesson/Save")]
+    [HttpPost("/lesson/save")]
     public async Task<Result<string>> SaveHtmlFile(LessonRequestDTO model)
     {
         try
@@ -130,7 +130,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpGet("/Lesson/Upload/{lessonId}")]
+    [HttpGet("/lesson/upload/{lessonId}")]
     public Result<string> GetHtmlFile(int lessonId)
     {
         try

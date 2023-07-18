@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodeFly.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/user")]
 [ApiController]
 public class UserController : ControllerBase
 {

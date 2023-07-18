@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CodeFly.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/lesson")]
     [ApiController]
     public class LessonController : ControllerBase
     {
@@ -27,19 +27,19 @@ namespace CodeFly.Controllers
         }
 
         // GET: api/Lesson
-        [HttpGet("List")]
+        [HttpGet("list")]
         public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] int? seasonId,
             [FromQuery] PagingModel pagingModel)
         {
             var lessons = new List<Lesson>();
             if (seasonId == null)
                 lessons =
-                    (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.SeasonId == seasonId,
+                    (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.ChapterId == seasonId,
                         pagingModel,
-                        l => l.Season);
+                        l => l.Chapter);
             else
                 lessons = (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.Id != -1, pagingModel,
-                    l => l.Season);
+                    l => l.Chapter);
             if (lessons.IsNullOrEmpty())
             {
                 return Result<IEnumerable<LessonDTO>>.GenerateFailure("not found", 400);
@@ -74,13 +74,13 @@ namespace CodeFly.Controllers
         }
 
         // POST: api/Lesson
-        [HttpPost("CreateAdmin")]
+        [HttpPost("create_admin")]
         public async Task<ActionResult<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
         {
             var lastSession = await _dbContext.Lessons.LastOrDefaultAsync();
             var newLessonId = lastSession.Id + 1;
             var newLesson = new Lesson()
-                { Name = lesson.Name, SeasonId = lesson.SeasonId, FileUrl = newLessonId + ".html" };
+                { Name = lesson.Name, ChapterId = lesson.ChapterId, FileUrl = newLessonId + ".html" };
             _dbContext.Lessons.Add(newLesson);
             await _dbContext.SaveChangesAsync();
 
@@ -117,7 +117,7 @@ namespace CodeFly.Controllers
         }
 
         // PUT: api/Lesson/{id}
-        [HttpPut("EditAdmin/{id}")]
+        [HttpPut("edit_admin/{id}")]
         public async Task<Result<string>> UpdateLesson(int id, AdminCreateLessonDTO lessonDTO)
         {
             if (id != lessonDTO.Id)

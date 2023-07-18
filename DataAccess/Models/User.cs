@@ -27,5 +27,7 @@ public partial class User
 
     public virtual Userdetail Userdetail { get; set; }
 
-    public virtual ICollection<Usertask> Usertasks { get; set; } = new List<Usertask>();
+    public virtual ICollection<Userlesson> Userlessons { get; set; } = new List<Userlesson>();
+
+    public virtual ICollection<Userquest> Userquests { get; set; } = new List<Userquest>();
 }

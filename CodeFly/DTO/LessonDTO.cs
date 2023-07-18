@@ -5,8 +5,8 @@ namespace CodeFly.DTO;
 public class LessonDTO
 {
     public int Id { get; set; }
-    public int SeasonId { get; set; }
-    public string SeasonName { get; set; }
+    public int ChapterId { get; set; }
+    public string ChapterName { get; set; }
 
     public string Name { get; set; }
 
@@ -18,10 +18,10 @@ public class LessonDTO
         dto.Id = lesson.Id;
         dto.Name = lesson.Name;
         dto.FileId = lesson.FileUrl;
-        if (lesson.Season != null)
+        if (lesson.Chapter != null)
         {
-            dto.SeasonId = (int) lesson.Season.Id;
-            dto.SeasonName = lesson.Season.Name;
+            dto.ChapterId = (int) lesson.Chapter.Id;
+            dto.ChapterName = lesson.Chapter.Name;
         }
 
         return dto;

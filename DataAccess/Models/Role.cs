@@ -9,7 +9,5 @@ public partial class Role
 
     public string Name { get; set; }
 
-    public virtual ICollection<Feature> Features { get; set; } = new List<Feature>();
-
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
