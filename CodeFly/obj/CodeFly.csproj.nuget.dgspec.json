@@ -20,7 +20,8 @@
           "net7.0"
         ],
         "sources": {
-          "C:\\Users\\Asus\\Downloads\\dotnet-sdk-7.0.304-win-x64\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {}
+          "C:\\Users\\Asus\\Downloads\\dotnet-sdk-7.0.304-win-x64\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
@@ -105,6 +106,9 @@
         "originalTargetFrameworks": [
           "net7.0"
         ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
