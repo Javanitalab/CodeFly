@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CodeFly.Controllers
 {
+    // [Authorize]
     [Route("api/chapter")]
     [ApiController]
     public class ChapterController : ControllerBase
@@ -27,6 +31,17 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<Result<IEnumerable<ChapterDTO>>> GetSeasons([FromQuery] PagingModel model)
         {
+            var isAuthenticated = HttpContext.User.Identity.IsAuthenticated;
+            if (isAuthenticated)
+            {
+                var username = HttpContext.User.Claims.FirstOrDefault(a=>a.Type=="username")?.Value;
+                var email = HttpContext.User.Claims.FirstOrDefault(a=>a.Type==ClaimTypes.Email)?.Value;
+                var id = HttpContext.User.Claims.FirstOrDefault(a=>a.Type=="userid")?.Value;
+
+                // Log the claims to check if they are correctly retrieved
+                Console.WriteLine($" Id: {id} Username: {username}, Email: {email}");
+            }
+
             var seasons = await _repository.ListAsNoTrackingAsync<Chapter>(s => s.Id != -1,model,s=>s.Lessons);
             
             return Result<IEnumerable<ChapterDTO>>.GenerateSuccess(seasons.Select(s => ChapterDTO.Create(s)));
@@ -50,7 +65,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSeason(ChapterDTO chapterDto)
         {
-            var season = new Chapter() { Name = chapterDto.Name };
+            var season = new Chapter() { Name = chapterDto.Name,SubjectId = chapterDto.SubjectId,Description = chapterDto.Description};
             _dbContext.Chapters.Add(season);
             await _dbContext.SaveChangesAsync();
 

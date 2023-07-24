@@ -9,7 +9,7 @@ public partial class Chapter
 
     public string Name { get; set; }
 
-    public int? SubjectId { get; set; }
+    public int SubjectId { get; set; }
 
     public string Description { get; set; }
 

@@ -92,7 +92,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpPost("/lesson/save")]
+    [HttpPost("/lesson/upload")]
     public async Task<Result<string>> SaveHtmlFile(LessonRequestDTO model)
     {
         try
@@ -130,7 +130,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpGet("/lesson/upload/{lessonId}")]
+    [HttpGet("/lesson/download/{lessonId}")]
     public Result<string> GetHtmlFile(int lessonId)
     {
         try

@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CodeFly
 {
@@ -44,9 +46,53 @@ namespace CodeFly
                 });
             });
 
+            services.AddAuthentication(x =>
+            {
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = "https://epita.net",
+                    ValidAudience = "https://codefly.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(AuthManager.SecretBytes),
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true
+                };
+            });
+
 
             services.AddControllers(options => { options.Filters.Add<ExceptionFilter>(); });
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "CodeFly", Version = "v1" }); });
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CodeFly", Version = "v1" }); 
+                    
+                    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.ApiKey,
+                        In = ParameterLocation.Header,
+                        Name = "Authorization",
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    });
+                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                    });
+
+                });
             services.AddTransient<Repository>();
         }
 
@@ -63,9 +109,16 @@ namespace CodeFly
 
             app.UseCors("YouShallPass");
 
+
             app.UseRouting();
 
+            // Use authentication middleware
+            app.UseAuthentication();
+
+            // Use authorization middleware
             app.UseAuthorization();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

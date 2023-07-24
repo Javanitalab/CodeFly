@@ -10,19 +10,21 @@ namespace CodeFly.Helper
     public class AuthManager
     {
         private const string SecretKey = "fD+402BtCqxSGwkuGc2sncSLKC5m1QcS7UlafnAKllleorGT5YwXVKcq0KbcjxRy"; // Replace with your own secret key
-        private static readonly byte[] SecretBytes = Encoding.UTF8.GetBytes(SecretKey);
+        protected internal static readonly byte[] SecretBytes = Encoding.UTF8.GetBytes(SecretKey);
 
         public static string GenerateAuthToken(User user)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("userid", user.Id.ToString()),
+                new Claim("username", user.Username),
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = "https://epita.net",
+                Audience = "https://codefly.com",
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(1), // Token expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretBytes), SecurityAlgorithms.HmacSha256Signature)

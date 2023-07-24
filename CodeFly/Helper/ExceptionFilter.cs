@@ -16,7 +16,7 @@ public class ExceptionFilter : IExceptionFilter
         var errorResponse = new Result<object>
         {
             Data = (object)null,
-            Error = context.Exception.Message,
+            Error = context.Exception.Message+"\n"+context.Exception.StackTrace,
             Status = 500
         };
 

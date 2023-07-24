@@ -15,6 +15,7 @@ namespace CodeFly.Controllers
     [ApiController]
     public class LessonController : ControllerBase
     {
+        
         private readonly CodeFlyDbContext _dbContext;
         private readonly Repository _repository;
         private static readonly string currentFilePath = Directory.GetCurrentDirectory();
@@ -28,13 +29,13 @@ namespace CodeFly.Controllers
 
         // GET: api/Lesson
         [HttpGet("list")]
-        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] int? seasonId,
+        public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] int? chapterId,
             [FromQuery] PagingModel pagingModel)
         {
             var lessons = new List<Lesson>();
-            if (seasonId == null)
+            if (chapterId == null)
                 lessons =
-                    (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.ChapterId == seasonId,
+                    (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.ChapterId == chapterId,
                         pagingModel,
                         l => l.Chapter);
             else
