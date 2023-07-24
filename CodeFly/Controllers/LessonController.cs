@@ -52,7 +52,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<Result<LessonDTO>> GetLesson(int id)
         {
-            var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == id,l=>l.Chapter);
+            var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == id, l => l.Chapter);
 
             if (lesson == null)
             {
@@ -66,7 +66,8 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<LessonDTO>> CreateLesson(LessonDTO lessonDto)
         {
-            var lesson = new Lesson() { Name = lessonDto.Name, FileUrl = lessonDto.FileId ,ChapterId = lessonDto.ChapterId};
+            var lesson = new Lesson()
+                { Name = lessonDto.Name, FileUrl = lessonDto.FileId, ChapterId = lessonDto.ChapterId };
             _dbContext.Lessons.Add(lesson);
             await _dbContext.SaveChangesAsync();
 
@@ -77,10 +78,12 @@ namespace CodeFly.Controllers
         [HttpPost("create_admin")]
         public async Task<ActionResult<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
         {
-            var lastSession = await _dbContext.Lessons.LastOrDefaultAsync();
-            var newLessonId = lastSession.Id + 1;
+            var lastSession = (await _dbContext.Lessons.OrderBy(a => a.Id).ToListAsync()).LastOrDefault();
+            var newLessonId = 1;
+            if (lastSession != null)
+                newLessonId = lastSession.Id + 1;
             var newLesson = new Lesson()
-                { Name = lesson.Name, ChapterId = lesson.ChapterId, FileUrl = newLessonId + ".html" };
+                { Id = newLessonId, Name = lesson.Name, ChapterId = lesson.ChapterId, FileUrl = newLessonId + ".html" };
             _dbContext.Lessons.Add(newLesson);
             await _dbContext.SaveChangesAsync();
 
@@ -118,15 +121,13 @@ namespace CodeFly.Controllers
 
         // PUT: api/Lesson/{id}
         [HttpPut("edit_admin/{id}")]
-        public async Task<Result<string>> UpdateLesson(int id, AdminCreateLessonDTO lessonDTO)
+        public async Task<Result<string>> UpdateLesson(int id, AdminEditLessonDTO lessonDTO)
         {
-            if (id != lessonDTO.Id)
-            {
+
+            var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == id);
+
+            if (lesson == null)
                 return Result<string>.GenerateFailure("lesson not found", 400);
-            }
-
-            var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == lessonDTO.Id);
-
             string filePath = Path.Combine(_pathToDirectory, lesson.Id + ".html");
 
             if (!System.IO.File.Exists(filePath))
