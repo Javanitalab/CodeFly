@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CodeFly.Controllers;
 
-[Route("api/user-lesson")]
+[Route("api/user_lesson")]
 [ApiController]
 public class UserLessonController : ControllerBase
 {

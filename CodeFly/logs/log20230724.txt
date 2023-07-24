@@ -1,0 +1,44 @@
+2023-07-24 21:11:57.209 +02:00 [INF] Request: POST /api/auth/login
+2023-07-24 21:12:04.978 +02:00 [INF] Response: 200
+2023-07-24 21:12:12.084 +02:00 [INF] Request: POST /api/auth/login
+2023-07-24 21:12:12.283 +02:00 [INF] Response: 200
+2023-07-24 21:14:30.734 +02:00 [INF] Request: POST /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpRequestStream
+2023-07-24 21:14:37.722 +02:00 [INF] Response: 200 /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream
+2023-07-24 21:15:17.227 +02:00 [INF] Request: POST /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpRequestStream
+2023-07-24 21:15:17.483 +02:00 [INF] Response: 200 /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream
+2023-07-24 21:18:47.402 +02:00 [INF] Request: POST /api/auth/login Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream
+2023-07-24 21:18:53.614 +02:00 [INF] Response: 400 /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream
+2023-07-24 21:18:58.688 +02:00 [INF] Request: POST /api/auth/login Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream
+2023-07-24 21:18:58.899 +02:00 [INF] Response: 400 /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream
+2023-07-24 21:24:28.263 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "string",
+  "password": "string"
+}
+2023-07-24 21:24:36.359 +02:00 [INF] Response: 400 /api/auth/login Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream
+2023-07-24 21:28:15.553 +02:00 [INF] Request: POST /api/auth/login Body: System.Threading.Tasks.Task`1[System.String]
+2023-07-24 21:28:15.650 +02:00 [INF] Response: 400 Body: {"data":null,"error":"user not found","status":400}
+2023-07-24 21:32:34.059 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "string",
+  "password": "string"
+}
+2023-07-24 21:32:40.683 +02:00 [INF] Response: 400 Body: {"data":null,"error":"user not found","status":400}
+2023-07-24 21:33:03.329 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "string",
+  "password": "string"
+}
+2023-07-24 21:33:03.540 +02:00 [INF] Response: 400 Body: {"data":null,"error":"user not found","status":400}
+2023-07-24 21:33:48.696 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "moja",
+  "password": "moja"
+}
+2023-07-24 21:33:49.628 +02:00 [INF] Response: 200 Body: {"data":{"user":{"id":1,"email":"moja","username":"moja","role":{"name":"User"},"userdetail":{"id":1,"name":"Bernard Polidario","age":"27","website":"https://github.com/polidario","bio":"Hello World!"},"coins":0,"points":0,"cups":0},"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJtb2phIiwiZW1haWwiOiJtb2phIiwibmJmIjoxNjkwMjI3MjI5LCJleHAiOjE2OTAzMTM2MjksImlhdCI6MTY5MDIyNzIyOSwiaXNzIjoiaHR0cHM6Ly9lcGl0YS5uZXQiLCJhdWQiOiJodHRwczovL2NvZGVmbHkuY29tIn0.rdPw5ot1a3gaUEDfHKnE2pYqV0Zse9C1rfVT2zCWxws"},"error":"","status":200}
+2023-07-24 21:35:45.392 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "string",
+  "password": "string"
+}
+2023-07-24 21:35:51.930 +02:00 [INF] Response: 400 Body: {"data":null,"error":"user not found","status":400}
+2023-07-24 21:36:36.374 +02:00 [INF] Request: POST /api/auth/login {
+  "email": "TEsttttttttttttt",
+  "password": "TEsttttttttttttt"
+}
+2023-07-24 21:36:36.630 +02:00 [INF] Response: 400 Body: {"data":null,"error":"user not found","status":400}

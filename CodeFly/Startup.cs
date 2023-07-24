@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CodeFly.Helper;
+using CodeFly.Middleware;
 using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
 
 namespace CodeFly
 {
@@ -94,6 +97,14 @@ namespace CodeFly
 
                 });
             services.AddTransient<Repository>();
+            
+            
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("logs/log.txt", LogEventLevel.Information, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+
         }
 
 
@@ -119,6 +130,8 @@ namespace CodeFly
             app.UseAuthorization();
 
             app.UseMiddleware<JwtMiddleware>();
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

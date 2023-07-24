@@ -80,3 +80,13 @@ C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\MimeTypes.Core.dll
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\Asus\RiderProjects\CodeFly\CodeFly\bin\Debug\net7.0\Serilog.Sinks.File.dll
