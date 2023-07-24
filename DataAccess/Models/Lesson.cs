@@ -9,9 +9,11 @@ public partial class Lesson
 
     public string Name { get; set; }
 
-    public int? ChapterId { get; set; }
+    public int ChapterId { get; set; }
 
     public string FileUrl { get; set; }
+
+    public string Description { get; set; }
 
     public virtual Chapter Chapter { get; set; }
 

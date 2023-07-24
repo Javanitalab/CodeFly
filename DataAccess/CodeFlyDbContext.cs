@@ -59,6 +59,7 @@ public partial class CodeFlyDbContext : DbContext
 
             entity.HasOne(d => d.Subject).WithMany(p => p.Chapters)
                 .HasForeignKey(d => d.SubjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("chapter_subject");
         });
 
@@ -68,10 +69,11 @@ public partial class CodeFlyDbContext : DbContext
 
             entity.ToTable("lesson");
 
-            entity.HasIndex(e => e.Name, "lesson_name_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ChapterId).HasColumnName("chapter_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(1024)
+                .HasColumnName("description");
             entity.Property(e => e.FileUrl)
                 .HasMaxLength(255)
                 .HasColumnName("file_url");
@@ -81,6 +83,7 @@ public partial class CodeFlyDbContext : DbContext
 
             entity.HasOne(d => d.Chapter).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.ChapterId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("lesson_chapter_id_fkey");
         });
 

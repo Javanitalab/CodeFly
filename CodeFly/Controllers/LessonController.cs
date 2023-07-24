@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ namespace CodeFly.Controllers
     [ApiController]
     public class LessonController : ControllerBase
     {
-        
         private readonly CodeFlyDbContext _dbContext;
         private readonly Repository _repository;
         private static readonly string currentFilePath = Directory.GetCurrentDirectory();
@@ -33,7 +33,7 @@ namespace CodeFly.Controllers
             [FromQuery] PagingModel pagingModel)
         {
             var lessons = new List<Lesson>();
-            if (chapterId == null)
+            if (chapterId != null)
                 lessons =
                     (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.ChapterId == chapterId,
                         pagingModel,
@@ -84,7 +84,10 @@ namespace CodeFly.Controllers
             if (lastSession != null)
                 newLessonId = lastSession.Id + 1;
             var newLesson = new Lesson()
-                { Id = newLessonId, Name = lesson.Name, ChapterId = lesson.ChapterId, FileUrl = newLessonId + ".html" };
+            {
+                Id = newLessonId, Name = lesson.Name, ChapterId = lesson.ChapterId, FileUrl = newLessonId + ".html",
+                Description = lesson.Description
+            };
             _dbContext.Lessons.Add(newLesson);
             await _dbContext.SaveChangesAsync();
 
@@ -124,7 +127,6 @@ namespace CodeFly.Controllers
         [HttpPut("edit_admin/{id}")]
         public async Task<Result<string>> UpdateLesson(int id, AdminEditLessonDTO lessonDTO)
         {
-
             var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == id);
 
             if (lesson == null)
@@ -160,6 +162,28 @@ namespace CodeFly.Controllers
 
             _dbContext.Lessons.Remove(lesson);
             await _dbContext.SaveChangesAsync();
+
+            string filePath = Path.Combine(_pathToDirectory, id + ".html");
+
+            // Check if the file exists
+
+            if (System.IO.File.Exists(filePath))
+            {
+                try
+                {
+                    System.IO.File.Delete(filePath);
+                    Console.WriteLine("File deleted successfully.");
+                }
+                catch (IOException ex)
+                {
+                    // Handle any exceptions that may occur during the deletion process
+                    Console.WriteLine($"Error deleting the file: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("The file does not exist.");
+            }
 
             return Result<string>.GenerateSuccess("deleted");
         }

@@ -34,16 +34,16 @@ namespace CodeFly.Controllers
 
         // GET: api/UserDetail/{id}
         [HttpGet("{id}")]
-        public async Task<Result<Userdetail>> GetUserDetail(int id)
+        public async Task<Result<UserdetailDTO>> GetUserDetail(int id)
         {
             var userDetail = await _dbContext.Userdetails.FirstOrDefaultAsync(u => u.Users.FirstOrDefault().UserdetailId == id);
 
             if (userDetail == null)
             {
-                return Result<Userdetail>.GenerateFailure("user not found", 400);
+                return Result<UserdetailDTO>.GenerateFailure("user not found", 400);
             }
 
-            return Result<Userdetail>.GenerateSuccess(userDetail);
+            return Result<UserdetailDTO>.GenerateSuccess(UserdetailDTO.Create(userDetail));
         }
 
         // POST: api/UserDetail
@@ -58,17 +58,17 @@ namespace CodeFly.Controllers
 
         // PUT: api/UserDetail/{id}
         [HttpPut("{id}")]
-        public async Task<Result<Userdetail>> UpdateUserDetail(int id, Userdetail userDetail)
+        public async Task<Result<UserdetailDTO>> UpdateUserDetail(int id, Userdetail userDetail)
         {
             if (id != userDetail.Id)
             {
-                return Result<Userdetail>.GenerateFailure("user not found",400);
+                return Result<UserdetailDTO>.GenerateFailure("user not found",400);
             }
 
             _dbContext.Entry(userDetail).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return Result<Userdetail>.GenerateSuccess(userDetail);
+            return Result<UserdetailDTO>.GenerateSuccess(UserdetailDTO.Create(userDetail));
         }
 
         // DELETE: api/UserDetail/{id}
