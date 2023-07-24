@@ -7,6 +7,7 @@ public class UserDTO
     public static UserDTO Create(User user)
     {
         var dto = new UserDTO();
+        dto.Id = user.Id;
         dto.Username = user.Username;
         dto.Email = user.Email;
         if (user.Userdetail != null)
@@ -26,6 +27,7 @@ public class UserDTO
         return dto;
     }
 
+    public int Id { get; set; }
     public string Email { get; set; }
     public string Username { get; set; }
     public RoleDTO Role { get; set; }

@@ -52,7 +52,7 @@ namespace CodeFly.Controllers
         [HttpGet("{id}")]
         public async Task<Result<LessonDTO>> GetLesson(int id)
         {
-            var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == id);
+            var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == id,l=>l.Chapter);
 
             if (lesson == null)
             {
@@ -66,7 +66,7 @@ namespace CodeFly.Controllers
         [HttpPost]
         public async Task<ActionResult<LessonDTO>> CreateLesson(LessonDTO lessonDto)
         {
-            var lesson = new Lesson() { Name = lessonDto.Name, FileUrl = lessonDto.FileId };
+            var lesson = new Lesson() { Name = lessonDto.Name, FileUrl = lessonDto.FileId ,ChapterId = lessonDto.ChapterId};
             _dbContext.Lessons.Add(lesson);
             await _dbContext.SaveChangesAsync();
 
