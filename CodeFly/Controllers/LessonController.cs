@@ -32,6 +32,8 @@ namespace CodeFly.Controllers
         public async Task<Result<IEnumerable<LessonDTO>>> GetLessons([FromQuery] int? chapterId,
             [FromQuery] PagingModel pagingModel)
         {
+            var userid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "userid")?.Value;
+
             var lessons = new List<Lesson>();
             if (chapterId != null)
                 lessons =
@@ -41,12 +43,32 @@ namespace CodeFly.Controllers
             else
                 lessons = (List<Lesson>)await _repository.ListAsNoTrackingAsync<Lesson>(l => l.Id != -1, pagingModel,
                     l => l.Chapter);
+
+            var userlessons = new List<Userlesson>();
+            var alreadyDoneLessonIds = new List<int>();
+            if (userid != null)
+            {
+                userlessons = await _dbContext.Userlessons
+                    .Where(ul => ul.UserId == int.Parse(userid)).ToListAsync();
+                alreadyDoneLessonIds = userlessons.Select(ul => ul.LessonId).ToList();
+            }
+
             if (lessons.IsNullOrEmpty())
             {
                 return Result<IEnumerable<LessonDTO>>.GenerateFailure("not found", 400);
             }
 
-            return Result<IEnumerable<LessonDTO>>.GenerateSuccess(lessons.Select(LessonDTO.Create));
+            var lessonDtos = lessons.Select(LessonDTO.Create);
+
+
+            var updatedLessons= lessonDtos.Select(lessonDto =>
+            {
+                if (alreadyDoneLessonIds.Contains(lessonDto.Id))
+                    lessonDto.Completion = true;
+                return lessonDto;
+            });
+
+            return Result<IEnumerable<LessonDTO>>.GenerateSuccess(updatedLessons);
         }
 
         // GET: api/Lesson/{id}

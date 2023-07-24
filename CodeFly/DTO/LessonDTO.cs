@@ -13,6 +13,8 @@ public class LessonDTO
 
     public string FileId { get; set; }
 
+    public bool Completion { get; set; }
+
     public static LessonDTO Create(Lesson lesson)
     {
         var dto = new LessonDTO();

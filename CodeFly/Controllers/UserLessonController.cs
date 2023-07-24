@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using CodeFly.DTO;
 using DataAccess;
@@ -24,12 +25,14 @@ public class UserLessonController : ControllerBase
     [HttpPost]
     public async Task<Result<string>> CreateLesson(CreateUserLessonDTO userLessonDto)
     {
-        var lesson = await _dbContext.Lessons.FirstOrDefaultAsync(l => l.Id == userLessonDto.LessonId);
+        var userid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "userid")?.Value;
+
+        var lesson = await _repository.FirstOrDefaultAsync<Lesson>(l => l.Id == userLessonDto.LessonId);
 
         if (lesson == null)
             return Result<string>.GenerateFailure("no lesson found", 400);
 
-        var userlesson = new Userlesson() { LessonId = userLessonDto.LessonId, UserId = 1 };
+        var userlesson = new Userlesson() { LessonId = userLessonDto.LessonId, UserId = int.Parse(userid) };
         _dbContext.Userlessons.Add(userlesson);
         await _dbContext.SaveChangesAsync();
 
