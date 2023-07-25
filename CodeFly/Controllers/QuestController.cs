@@ -2,6 +2,7 @@
 using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
+using MySqlX.XDevAPI.Common;
 
 namespace CodeFly.Controllers;
 
@@ -32,7 +33,7 @@ public class QuestController : ControllerBase
 
         var userquests = await _repository.ListAsNoTrackingAsync<Userquest>(uq => uq.UserId == userId,
             new PagingModel { PageSize = 1000, PageNumber = 0 },
-        u => u.UserquestUserlessons.Select(a => a.Userlesson.Lesson));
+            u => u.UserquestUserlessons.Select(a => a.Userlesson.Lesson));
 
         return Result<IEnumerable<UserQuestDTO>>.GenerateSuccess(userquests.Select(UserQuestDTO.Create));
     }
@@ -62,12 +63,17 @@ public class QuestController : ControllerBase
 
     // POST: api/Task
     [HttpPost]
-    public async Task<ActionResult<Task>> CreateTask(Quest quest)
+    public async Task<Result<QuestDTO>> CreateTask(QuestDTO questDto)
     {
+        var quest= new Quest()
+        {
+            Completed = false, EndDate = questDto.EndDate, NeededProgress = questDto.NeededProgress,
+            RewardType = questDto.RewardType, RewardValue = questDto.RewardValue, Title = questDto.Title
+        };
         _dbContext.Quests.Add(quest);
         await _dbContext.SaveChangesAsync();
 
-        return CreatedAtAction("GetQuest", new { id = quest.Id }, quest);
+        return Result<QuestDTO>.GenerateSuccess(questDto);
     }
 
     // PUT: api/Task/5

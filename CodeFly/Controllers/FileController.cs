@@ -33,7 +33,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpPost("/content/upload")]
+    [HttpPost("content/upload")]
     public async Task<IActionResult> UploadMedia([FromForm] MediaUpload mediaUpload)
     {
         if (mediaUpload.File == null || mediaUpload.File.Length == 0)
@@ -61,7 +61,7 @@ public class FileController : ControllerBase
         return Ok("File uploaded successfully.");
     }
 
-    [HttpGet("/content/download/{fileName}")]
+    [HttpGet("content/download/{fileName}")]
     public IActionResult DownloadMedia(string fileName)
     {
         // Combine the requested filename with the upload directory to get the full path
@@ -92,7 +92,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpPost("/lesson/upload")]
+    [HttpPost("lesson/upload")]
     public async Task<Result<string>> SaveHtmlFile(LessonRequestDTO model)
     {
         try
@@ -130,7 +130,7 @@ public class FileController : ControllerBase
     }
 
 
-    [HttpGet("/lesson/download/{lessonId}")]
+    [HttpGet("lesson/download/{lessonId}")]
     public Result<string> GetHtmlFile(int lessonId)
     {
         try
