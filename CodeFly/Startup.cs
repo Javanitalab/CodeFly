@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CodeFly.Helper;
 using CodeFly.Middleware;
 using DataAccess;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

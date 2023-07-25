@@ -19,9 +19,9 @@ public partial class User
 
     public int? Coins { get; set; }
 
-    public int? Points { get; set; }
+    public int? DayStreaks { get; set; }
 
-    public int? Cups { get; set; }
+    public int? Wins { get; set; }
 
     public virtual Role Role { get; set; }
 

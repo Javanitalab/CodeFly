@@ -21,8 +21,8 @@ public class UserDTO
         }
 
         dto.Coins  = user.Coins ?? 0;
-        dto.Points  = user.Points ?? 0;
-        dto.Cups  = user.Cups ?? 0;
+        dto.DayStreaks  = user.DayStreaks ?? 0;
+        dto.Wins  = user.Wins ?? 0;
 
         return dto;
     }
@@ -35,9 +35,9 @@ public class UserDTO
     
     public int Coins { get; set; }
 
-    public int Points { get; set; }
+    public int DayStreaks { get; set; }
 
-    public int Cups { get; set; }
+    public int Wins { get; set; }
 
 
 }

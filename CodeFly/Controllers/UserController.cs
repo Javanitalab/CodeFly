@@ -37,7 +37,7 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<Result<UserDTO>> GetUser(int id)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Userdetail.Users.FirstOrDefault().Id == id);
+        var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == id, u => u.Userdetail, u => u.Role);
 
         if (user == null)
         {

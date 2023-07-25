@@ -1,7 +1,8 @@
-﻿using DataAccess.Models;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess;
+namespace DataAccess.Models;
 
 public partial class CodeFlyDbContext : DbContext
 {
@@ -152,19 +153,19 @@ public partial class CodeFlyDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Coins).HasColumnName("coins");
-            entity.Property(e => e.Cups).HasColumnName("cups");
+            entity.Property(e => e.DayStreaks).HasColumnName("dayStreaks");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");
-            entity.Property(e => e.Points).HasColumnName("points");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.UserdetailId).HasColumnName("userdetail_id");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
                 .HasColumnName("username");
+            entity.Property(e => e.Wins).HasColumnName("wins");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
@@ -207,6 +208,7 @@ public partial class CodeFlyDbContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            entity.Property(e => e.CompletionDate).HasColumnName("completion_date");
             entity.Property(e => e.LessonId).HasColumnName("lesson_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

@@ -7,6 +7,7 @@ using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CodeFly.Controllers
 {
     [Route("api/user_detail")]

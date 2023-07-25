@@ -11,6 +11,8 @@ public partial class Userlesson
 
     public int LessonId { get; set; }
 
+    public DateOnly CompletionDate { get; set; }
+
     public virtual Lesson Lesson { get; set; }
 
     public virtual User User { get; set; }
