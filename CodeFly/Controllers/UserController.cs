@@ -52,7 +52,8 @@ public class UserController : ControllerBase
     public async Task<ActionResult<UserDTO>> CreateUser(UserDTO userdto)
     {
         var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
-        var user = new User() { Email = userdto.Email, Password = userdto.Email, Username = userdto.Username, Role = role };
+        var user = new User()
+            { Email = userdto.Email, Password = userdto.Email, Username = userdto.Username, Role = role };
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
 
@@ -61,33 +62,20 @@ public class UserController : ControllerBase
 
     // PUT: api/User/{id}
     [HttpPut("{id}")]
-    public async Task<Result<string>> UpdateUser(int id, User user)
+    public async Task<Result<UserDTO>> UpdateUser(int id, UserSmallDTO userDto)
     {
-        if (id != user.Id)
+        if (id != userDto.Id)
         {
-            return Result<string>.GenerateFailure("user not found", 400);
+            return Result<UserDTO>.GenerateFailure("user not found", 400);
         }
 
+        var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == id, u => u.Role, u => u.Userdetail);
+        user.Email = userDto.Email;
+        user.Username = userDto.Username;
         _dbContext.Entry(user).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
 
-        return Result<string>.GenerateSuccess("done");
+        return Result<UserDTO>.GenerateSuccess(UserDTO.Create(user));
     }
 
-    // DELETE: api/User/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(int id)
-    {
-        var user = await _dbContext.Users.FindAsync(id);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        _dbContext.Users.Remove(user);
-        await _dbContext.SaveChangesAsync();
-
-        return NoContent();
-    }
 }

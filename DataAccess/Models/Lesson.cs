@@ -18,6 +18,4 @@ public partial class Lesson
     public virtual Chapter Chapter { get; set; }
 
     public virtual ICollection<Userlesson> Userlessons { get; set; } = new List<Userlesson>();
-
-    public virtual ICollection<Userquest> Userquests { get; set; } = new List<Userquest>();
 }

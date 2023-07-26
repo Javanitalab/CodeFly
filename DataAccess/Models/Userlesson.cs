@@ -11,11 +11,9 @@ public partial class Userlesson
 
     public int LessonId { get; set; }
 
-    public DateOnly CompletionDate { get; set; }
+    public string CompletionDate { get; set; }
 
     public virtual Lesson Lesson { get; set; }
 
     public virtual User User { get; set; }
-
-    public virtual ICollection<UserquestUserlesson> UserquestUserlessons { get; set; } = new List<UserquestUserlesson>();
 }

@@ -100,7 +100,7 @@ namespace CodeFly.Controllers
 
         // POST: api/Lesson
         [HttpPost("create_admin")]
-        public async Task<ActionResult<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
+        public async Task<Result<LessonDTO>> CreateLesson(AdminCreateLessonDTO lesson)
         {
             var lastSession = (await _dbContext.Lessons.OrderBy(a => a.Id).ToListAsync()).LastOrDefault();
             var newLessonId = 1;
@@ -125,7 +125,7 @@ namespace CodeFly.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLesson), new { id = newLessonId }, lesson);
+            return Result<LessonDTO>.GenerateSuccess(LessonDTO.Create(newLesson));
         }
 
         // PUT: api/Lesson/{id}
@@ -154,6 +154,9 @@ namespace CodeFly.Controllers
 
             if (lesson == null)
                 return Result<string>.GenerateFailure("lesson not found", 400);
+
+            lesson.Description = lessonDTO.Description;
+            lesson.Name = lessonDTO.Name;
             string filePath = Path.Combine(_pathToDirectory, lesson.Id + ".html");
 
             if (!System.IO.File.Exists(filePath))

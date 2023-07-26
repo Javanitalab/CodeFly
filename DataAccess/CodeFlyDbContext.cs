@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Models;
+namespace DataAccess;
 
 public partial class CodeFlyDbContext : DbContext
 {
@@ -32,8 +31,6 @@ public partial class CodeFlyDbContext : DbContext
     public virtual DbSet<Userlesson> Userlessons { get; set; }
 
     public virtual DbSet<Userquest> Userquests { get; set; }
-
-    public virtual DbSet<UserquestUserlesson> UserquestUserlessons { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -98,13 +95,13 @@ public partial class CodeFlyDbContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Completed).HasColumnName("completed");
-            entity.Property(e => e.EndDate).HasColumnName("end_date");
-            entity.Property(e => e.NeededProgress)
-                .HasColumnType("bit(1)")
-                .HasColumnName("needed_progress");
-            entity.Property(e => e.RewardType)
-                .HasColumnType("bit(1)")
-                .HasColumnName("reward_type");
+            entity.Property(e => e.EndDate)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("end_date");
+            entity.Property(e => e.NeededProgress).HasColumnName("needed_progress");
+            entity.Property(e => e.QuestType).HasColumnName("quest_type");
+            entity.Property(e => e.RewardType).HasColumnName("reward_type");
             entity.Property(e => e.RewardValue).HasColumnName("reward_value");
             entity.Property(e => e.Title)
                 .IsRequired()
@@ -208,7 +205,10 @@ public partial class CodeFlyDbContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.CompletionDate).HasColumnName("completion_date");
+            entity.Property(e => e.CompletionDate)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("completion_date");
             entity.Property(e => e.LessonId).HasColumnName("lesson_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -232,43 +232,23 @@ public partial class CodeFlyDbContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.Creationdate).HasColumnName("creationdate");
-            entity.Property(e => e.LessonId).HasColumnName("lesson_id");
+            entity.Property(e => e.Creationdate)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("creationdate");
+            entity.Property(e => e.Progress).HasColumnName("progress");
             entity.Property(e => e.QuestId).HasColumnName("quest_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Lesson).WithMany(p => p.Userquests)
-                .HasForeignKey(d => d.LessonId)
-                .HasConstraintName("userquest_lesson");
-
             entity.HasOne(d => d.Quest).WithMany(p => p.Userquests)
                 .HasForeignKey(d => d.QuestId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("quest_user");
 
             entity.HasOne(d => d.User).WithMany(p => p.Userquests)
                 .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_quest");
-        });
-
-        modelBuilder.Entity<UserquestUserlesson>(entity =>
-        {
-            entity.HasKey(e => new { e.Id, e.UserquestId, e.UserlessonId }).HasName("userquest_userlesson_pkey");
-
-            entity.ToTable("userquest_userlesson");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.UserquestId).HasColumnName("userquest_id");
-            entity.Property(e => e.UserlessonId).HasColumnName("userlesson_id");
-
-            entity.HasOne(d => d.Userlesson).WithMany(p => p.UserquestUserlessons)
-                .HasForeignKey(d => d.UserlessonId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("uqul_userlesson");
-
-            entity.HasOne(d => d.Userquest).WithMany(p => p.UserquestUserlessons)
-                .HasForeignKey(d => d.UserquestId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("uqul_userquest");
         });
 
         OnModelCreatingPartial(modelBuilder);

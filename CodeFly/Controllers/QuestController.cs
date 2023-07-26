@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CodeFly.DTO;
 using DataAccess;
 using DataAccess.Models;
+using Microsoft.IdentityModel.Tokens;
 using MySqlX.XDevAPI.Common;
 
 
@@ -30,11 +32,32 @@ public class QuestController : ControllerBase
     [HttpGet("user")]
     public async Task<Result<IEnumerable<UserQuestDTO>>> GetUserQuest()
     {
-        var userId = 1;
+        var userid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "userid")?.Value;
 
-        var userquests = await _repository.ListAsNoTrackingAsync<Userquest>(uq => uq.UserId == userId,
-            new PagingModel { PageSize = 1000, PageNumber = 0 },
-            u => u.UserquestUserlessons.Select(a => a.Userlesson.Lesson));
+        if (userid.IsNullOrEmpty())
+            return Result<IEnumerable<UserQuestDTO>>.GenerateFailure("user not authenticated", 401);
+
+
+        var today = DateTime.Today.ToString();
+        var quests = await _repository.ListAsNoTrackingAsync<Quest>(
+            uq => (uq.EndDate) ==  today,
+            new PagingModel() { PageNumber = 0, PageSize = 10000 }, uq => uq.Userquests);
+
+        var userquests = quests.Select(q =>
+        {
+            var userquest = q.Userquests.FirstOrDefault(uq => uq.UserId == int.Parse(userid));
+            if (userquest == null)
+            {
+                userquest = new Userquest()
+                {
+                    Quest = q,
+                    UserId = int.Parse(userid),
+                    Creationdate = DateTime.Today.ToString()
+                };
+            }
+
+            return userquest;
+        });
 
         return Result<IEnumerable<UserQuestDTO>>.GenerateSuccess(userquests.Select(UserQuestDTO.Create));
     }
@@ -44,7 +67,9 @@ public class QuestController : ControllerBase
     [HttpGet]
     public async Task<Result<IEnumerable<QuestDTO>>> GetQuests()
     {
-        var quests = await _dbContext.Quests.ToListAsync();
+        var today = DateTime.Today.ToString();
+
+        var quests = await _dbContext.Quests.Where(q => (q.EndDate) == today).ToListAsync();
         return Result<IEnumerable<QuestDTO>>.GenerateSuccess(quests.Select(QuestDTO.Create));
     }
 
@@ -66,14 +91,16 @@ public class QuestController : ControllerBase
     [HttpPost]
     public async Task<Result<QuestDTO>> CreateTask(QuestDTO questDto)
     {
-        var quest= new Quest()
+        
+        var quest = new Quest()
         {
-            Completed = false, EndDate = questDto.EndDate, NeededProgress = questDto.NeededProgress,
-            RewardType = questDto.RewardType, RewardValue = questDto.RewardValue, Title = questDto.Title
+            Completed = false, EndDate = DateTime.Today.ToString(), NeededProgress = questDto.NeededProgress,QuestType = (int)questDto.QuestType,
+            RewardType = (int)questDto.RewardType, RewardValue = questDto.RewardValue, Title = questDto.Title
         };
         _dbContext.Quests.Add(quest);
         await _dbContext.SaveChangesAsync();
 
+        questDto.Id = quest.Id;
         return Result<QuestDTO>.GenerateSuccess(questDto);
     }
 
@@ -85,6 +112,8 @@ public class QuestController : ControllerBase
         {
             return Result<QuestDTO>.GenerateFailure("not found", 400);
         }
+
+        quest.EndDate = DateTime.Today.ToString();
 
         _dbContext.Entry(quest).State = EntityState.Modified;
 
