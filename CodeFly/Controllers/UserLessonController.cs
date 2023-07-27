@@ -53,7 +53,7 @@ public class UserLessonController : ControllerBase
         
         _dbContext.Userlessons.Add(userlesson);
 
-        var quests = await _repository.ListAsync<Quest>(q => q.Id != -1,
+        var quests = await _repository.ListAsNoTrackingAsync<Quest>(q => q.Id != -1,
             new PagingModel() { PageSize = 1000, PageNumber = 0 }, q => q.Userquests);
 
         if (!quests.IsNullOrEmpty())
@@ -73,7 +73,7 @@ public class UserLessonController : ControllerBase
                             userquest.Creationdate = DateTime.Today.ToString();
                             userquest.Progress = 1;
                             userquest.UserId = int.Parse(userid);
-                            quest.Userquests.Add(userquest);
+                            userquest.QuestId=quest.Id;
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
@@ -96,7 +96,7 @@ public class UserLessonController : ControllerBase
                         if (userquest == null)
                         {
                             userquest = new Userquest();
-                            quest.Userquests.Add(userquest);
+                            userquest.QuestId=quest.Id;
                             userquest.UserId = int.Parse(userid);
                             userquest.Creationdate = DateTime.Today.ToString();
                             if (lesson.Chapter.Lessons.Count != 1)
@@ -134,7 +134,7 @@ public class UserLessonController : ControllerBase
                         if (userquest == null)
                         {
                             userquest = new Userquest();
-                            quest.Userquests.Add(userquest);
+                            userquest.QuestId=quest.Id;
                             userquest.UserId = int.Parse(userid);
                             userquest.Creationdate = DateTime.Today.ToString();
                             userquest.Progress = 0;
