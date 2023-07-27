@@ -122,7 +122,7 @@ namespace CodeFly.Controllers
             return Result<string>.GenerateSuccess("deleted");
         }
 
-        [HttpGet("{SubjectId}")]
+        [HttpGet("{subjectId}")]
         public async Task<Result<List<ChapterDTO>>> GetLessons(int subjectId)
         {
             var seasons = await _dbContext.Chapters.Where(s => s.SubjectId == subjectId).ToListAsync();
@@ -131,7 +131,7 @@ namespace CodeFly.Controllers
                 return Result<List<ChapterDTO>>.GenerateSuccess(seasons.Select(ChapterDTO.Create).ToList());
             }
 
-            return Result<List<ChapterDTO>>.GenerateFailure(" no lessons found", 400);
+            return Result<List<ChapterDTO>>.GenerateFailure(" no chapters found", 400);
         }
     }
 }
