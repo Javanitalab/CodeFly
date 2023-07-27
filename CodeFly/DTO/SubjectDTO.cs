@@ -22,6 +22,10 @@ public class SubjectDTO
         {
             dto.Chapters = subject.Chapters.Select(ChapterDTO.Create).ToList();
         }
+        else
+        {
+            dto.Chapters = new List<ChapterDTO>();
+        }
 
         return dto;
     }

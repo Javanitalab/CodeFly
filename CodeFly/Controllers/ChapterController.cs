@@ -92,17 +92,20 @@ namespace CodeFly.Controllers
 
         // PUT: api/Season/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSeason(int id, Chapter season)
+        public async Task<Result<string>> UpdateSeason(int id, ChapterDTO chapterDto)
         {
-            if (id != season.Id)
-            {
-                return BadRequest();
-            }
+            var chapter = await _dbContext.Chapters.FirstOrDefaultAsync(c => c.Id == id);
 
-            _dbContext.Entry(season).State = EntityState.Modified;
+            if (chapter == null)
+                return Result<string>.GenerateFailure("chapter not found");
+
+            chapter.Name = chapterDto.Name;
+            chapter.Description = chapterDto.Description;
+            
+            _dbContext.Entry(chapter).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Result<string>.GenerateSuccess("all done");
         }
 
         // DELETE: api/Season/{id}
@@ -125,7 +128,7 @@ namespace CodeFly.Controllers
         [HttpGet("{subjectId}")]
         public async Task<Result<List<ChapterDTO>>> GetLessons(int subjectId)
         {
-            var seasons = await _dbContext.Chapters.Where(s => s.SubjectId == subjectId).ToListAsync();
+            var seasons = await _repository.ListAsNoTrackingAsync<Chapter>(s => s.SubjectId == subjectId);
             if (!seasons.IsNullOrEmpty())
             {
                 return Result<List<ChapterDTO>>.GenerateSuccess(seasons.Select(ChapterDTO.Create).ToList());
