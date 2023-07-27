@@ -26,6 +26,10 @@ public class ChapterDTO
         {
             dto.Lessons = chapter.Lessons.Select(p => LessonDTO.Create(p)).ToList();
         }
+        else
+        {
+            dto.Lessons = new List<LessonDTO>();
+        }
 
         return dto;
     }
