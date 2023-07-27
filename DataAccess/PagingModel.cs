@@ -2,7 +2,7 @@
 
 public class PagingModel
 {
-    public int? Id { get; set; }
+    public int? id { get; set; }
 
     public int PageNumber { get; set; }
 

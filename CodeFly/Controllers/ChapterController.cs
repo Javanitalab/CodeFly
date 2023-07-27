@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CodeFly.DTO;
@@ -29,47 +30,33 @@ namespace CodeFly.Controllers
 
         // GET: api/Season
         [HttpGet]
-        public async Task<Result<IEnumerable<ChapterDTO>>> GetSeasons([FromQuery] PagingModel model)
+        public async Task<Result<object>> GetSeasons([FromQuery] PagingModel model)
         {
-            var isAuthenticated = HttpContext.User.Identity.IsAuthenticated;
-            if (isAuthenticated)
+            var seasons = new List<Chapter>();
+            if (model.PageSize != 0)
             {
-                var username = HttpContext.User.Claims.FirstOrDefault(a=>a.Type=="username")?.Value;
-                var email = HttpContext.User.Claims.FirstOrDefault(a=>a.Type==ClaimTypes.Email)?.Value;
-                var id = HttpContext.User.Claims.FirstOrDefault(a=>a.Type=="userid")?.Value;
-
-                // Log the claims to check if they are correctly retrieved
-                Console.WriteLine($" Id: {id} Username: {username}, Email: {email}");
+                seasons = (await _repository.ListAsNoTrackingAsync<Chapter>(s => s.Id != -1, model, s => s.Lessons))
+                    .ToList();
+                return Result<object>.GenerateSuccess(seasons.Select(s => ChapterDTO.Create(s)));
             }
-
-            var seasons = await _repository.ListAsNoTrackingAsync<Chapter>(s => s.Id != -1,model,s=>s.Lessons);
-            
-            return Result<IEnumerable<ChapterDTO>>.GenerateSuccess(seasons.Select(s => ChapterDTO.Create(s)));
+            else
+            {
+                var chapter = (await _repository.FirstOrDefaultAsNoTrackingAsync<Chapter>(s => s.Id == model.id,s=>s.Lessons));
+                return Result<object>.GenerateSuccess(ChapterDTO.Create(chapter));
+            }
         }
 
-        // GET: api/Season/{id}
-        [HttpGet("{id}")]
-        public async Task<Result<ChapterDTO>> GetSeason(int id)
-        {
-            var season = await _dbContext.Chapters.FindAsync(id);
-
-            if (season == null)
-            {
-                return Result<ChapterDTO>.GenerateFailure("not found", 400);
-            }
-
-            return Result<ChapterDTO>.GenerateSuccess(ChapterDTO.Create(season));
-        }
 
         // POST: api/Chapter
         [HttpPost]
-        public async Task<IActionResult> CreateSeason(ChapterDTO chapterDto)
+        public async Task<Result<string>> CreateSeason(ChapterDTO chapterDto)
         {
-            var season = new Chapter() { Name = chapterDto.Name,SubjectId = chapterDto.SubjectId,Description = chapterDto.Description};
+            var season = new Chapter()
+                { Name = chapterDto.Name, SubjectId = chapterDto.SubjectId, Description = chapterDto.Description };
             _dbContext.Chapters.Add(season);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSeason), new { id = season.Id }, season);
+            return Result<string>.GenerateSuccess("all done");
         }
 
         // PUT: api/Season/{id}
