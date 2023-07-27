@@ -97,11 +97,17 @@ public class QuestController : ControllerBase
             Completed = false, EndDate = DateTime.Today.ToString(), NeededProgress = questDto.NeededProgress,QuestType = (int)questDto.QuestType,
             RewardType = (int)questDto.RewardType, RewardValue = questDto.RewardValue, Title = questDto.Title
         };
+        var listAsync = await _dbContext.Quests.AsNoTracking().OrderBy(q => q.Id).ToListAsync();
+        var lastquest = listAsync.LastOrDefault();
+        if (lastquest == null)
+            quest.Id = 1;
+        else
+            quest.Id = lastquest.Id + 1;
         _dbContext.Quests.Add(quest);
         await _dbContext.SaveChangesAsync();
 
         questDto.Id = quest.Id;
-        return Result<QuestDTO>.GenerateSuccess(questDto);
+        return Result<QuestDTO>.GenerateSuccess(QuestDTO.Create(quest));
     }
 
     // PUT: api/Task/5
