@@ -32,17 +32,48 @@ namespace CodeFly.Controllers
         [HttpGet]
         public async Task<Result<object>> GetSeasons([FromQuery] PagingModel model)
         {
+            var userid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "userid")?.Value;
+
+            var userlessons = new List<Userlesson>();
+            var alreadyDoneLessonIds = new List<int>();
+            if (userid != null)
+            {
+                userlessons = await _dbContext.Userlessons
+                    .Where(ul => ul.UserId == int.Parse(userid)).ToListAsync();
+                alreadyDoneLessonIds = userlessons.Select(ul => ul.LessonId).ToList();
+            }
+
             var seasons = new List<Chapter>();
             if (model.PageSize != 0)
             {
                 seasons = (await _repository.ListAsNoTrackingAsync<Chapter>(s => s.Id != -1, model, s => s.Lessons))
                     .ToList();
-                return Result<object>.GenerateSuccess(seasons.Select(s => ChapterDTO.Create(s)));
+                var chapterDtos = seasons.Select(s => ChapterDTO.Create(s));
+                var updatedChapterDtos = chapterDtos.Select(c =>
+                {
+                    c.Lessons = c.Lessons.Select(lessonDto =>
+                    {
+                        if (alreadyDoneLessonIds.Contains(lessonDto.Id))
+                            lessonDto.Completion = true;
+                        return lessonDto;
+                    }).ToList();
+                    return c;
+                }).ToList();
+                return Result<object>.GenerateSuccess(updatedChapterDtos);
             }
             else
             {
-                var chapter = (await _repository.FirstOrDefaultAsNoTrackingAsync<Chapter>(s => s.Id == model.id,s=>s.Lessons));
-                return Result<object>.GenerateSuccess(ChapterDTO.Create(chapter));
+                var chapter =
+                    (await _repository.FirstOrDefaultAsNoTrackingAsync<Chapter>(s => s.Id == model.id, s => s.Lessons));
+                var chapterDto = ChapterDTO.Create(chapter);
+
+                chapterDto.Lessons = chapterDto.Lessons.Select(lessonDto =>
+                {
+                    if (alreadyDoneLessonIds.Contains(lessonDto.Id))
+                        lessonDto.Completion = true;
+                    return lessonDto;
+                }).ToList();
+                return Result<object>.GenerateSuccess(chapterDto);
             }
         }
 
