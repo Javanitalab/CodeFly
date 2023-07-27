@@ -8,6 +8,7 @@ using DataAccess;
 using DataAccess.Enums;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 
@@ -48,9 +49,18 @@ public class UserLessonController : ControllerBase
         if (lesson == null)
             return Result<string>.GenerateFailure("no lesson found", 400);
 
+        var lastUserLesson = await _dbContext.Userlessons.OrderBy(a => a.Id).LastOrDefaultAsync();
+
+        var userlessonId = 0;
+        if (lastUserLesson != null)
+            userlessonId = lastUserLesson.Id +1 ;
+
         var userlesson = new Userlesson()
-            { LessonId = userLessonDto.LessonId, UserId = int.Parse(userid), CompletionDate = DateTime.Today.ToString() };
-        
+        {
+            Id = userlessonId,
+            LessonId = userLessonDto.LessonId, UserId = int.Parse(userid), CompletionDate = DateTime.Today.ToString()
+        };
+
         _dbContext.Userlessons.Add(userlesson);
 
         var quests = await _repository.ListAsNoTrackingAsync<Quest>(q => q.Id != -1,
@@ -73,7 +83,7 @@ public class UserLessonController : ControllerBase
                             userquest.Creationdate = DateTime.Today.ToString();
                             userquest.Progress = 1;
                             userquest.UserId = int.Parse(userid);
-                            userquest.QuestId=quest.Id;
+                            userquest.QuestId = quest.Id;
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
@@ -88,7 +98,6 @@ public class UserLessonController : ControllerBase
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
                                 user.Coins++;
                             }
-
                         }
 
                         break;
@@ -96,7 +105,7 @@ public class UserLessonController : ControllerBase
                         if (userquest == null)
                         {
                             userquest = new Userquest();
-                            userquest.QuestId=quest.Id;
+                            userquest.QuestId = quest.Id;
                             userquest.UserId = int.Parse(userid);
                             userquest.Creationdate = DateTime.Today.ToString();
                             if (lesson.Chapter.Lessons.Count != 1)
@@ -104,13 +113,12 @@ public class UserLessonController : ControllerBase
                             else
                                 userquest.Progress = 1;
 
-                            
+
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
                                 user.Coins++;
                             }
-
                         }
                         else
                         {
@@ -120,13 +128,12 @@ public class UserLessonController : ControllerBase
 
                             if (chapterLessonIds.Count() == allLessonsCompleted.Count + 1)
                                 userquest.Progress++;
-                            
+
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
                                 user.Coins++;
                             }
-
                         }
 
                         break;
@@ -134,36 +141,36 @@ public class UserLessonController : ControllerBase
                         if (userquest == null)
                         {
                             userquest = new Userquest();
-                            userquest.QuestId=quest.Id;
+                            userquest.QuestId = quest.Id;
                             userquest.UserId = int.Parse(userid);
                             userquest.Creationdate = DateTime.Today.ToString();
                             userquest.Progress = 0;
                             if (lesson.Chapter.Subject.Chapters.Count == 1 && lesson.Chapter.Lessons.Count == 1)
                                 userquest.Progress = 1;
 
-                            
+
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
                                 user.Coins++;
                             }
-
                         }
                         else
                         {
                             var subjectLessonIds = lesson.Chapter.Subject.Chapters.SelectMany(c => c.Lessons)
                                 .Select(l => l.Id);
-                            var allLessonsCompleted = await _repository.ListAsNoTrackingAsync<Userlesson>(ul => subjectLessonIds.Contains(ul.LessonId),new PagingModel(){PageNumber = 0,PageSize = 1000});
+                            var allLessonsCompleted = await _repository.ListAsNoTrackingAsync<Userlesson>(
+                                ul => subjectLessonIds.Contains(ul.LessonId),
+                                new PagingModel() { PageNumber = 0, PageSize = 1000 });
                             if (subjectLessonIds.Count() == allLessonsCompleted.Count + 1)
                                 userquest.Progress++;
-                            
-                            
+
+
                             if (userquest.Progress == quest.NeededProgress)
                             {
                                 var user = await _repository.FirstOrDefaultAsync<User>(u => u.Id == int.Parse(userid));
                                 user.Coins++;
                             }
-
                         }
 
                         break;

@@ -84,6 +84,45 @@ public class Repository
         return (IList<TEntity>)items;
     }
 
+    public async Task<IList<TEntity>> ListAsNoTrackingAsync<TEntity>(
+        Expression<Func<TEntity, bool>> predicate,
+        params Expression<Func<TEntity, object>>[] includes)
+        where TEntity : class
+    {
+        IQueryable<TEntity> query = _dbContext.Set<TEntity>().AsNoTracking().Where(predicate).AsQueryable();
+        Expression<Func<TEntity, object>>[] expressionArray = includes;
+        for (int index = 0; index < expressionArray.Length; ++index)
+        {
+            Expression<Func<TEntity, object>> include = expressionArray[index];
+            query = query.Include(include.AsPath());
+            include = null;
+        }
+        expressionArray = null;
+        List<TEntity> result = await query.ToListAsync<TEntity>();
+        IEnumerable<TEntity> items = result;
+        int totalCount = await query.CountAsync();
+        return (IList<TEntity>)items;
+    }
+
+    public async Task<IList<TEntity>> ListAsNoTrackingAsync<TEntity>(
+        params Expression<Func<TEntity, object>>[] includes)
+        where TEntity : class
+    {
+        IQueryable<TEntity> query = _dbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+        Expression<Func<TEntity, object>>[] expressionArray = includes;
+        for (int index = 0; index < expressionArray.Length; ++index)
+        {
+            Expression<Func<TEntity, object>> include = expressionArray[index];
+            query = query.Include(include.AsPath());
+            include = null;
+        }
+        expressionArray = null;
+        List<TEntity> result = await query.ToListAsync<TEntity>();
+        IEnumerable<TEntity> items = result;
+        int totalCount = await query.CountAsync();
+        return (IList<TEntity>)items;
+    }
+
     public async Task<IList<TEntity>> ListAsync<TEntity>(
         Expression<Func<TEntity, bool>> predicate,
         PagingModel model,
